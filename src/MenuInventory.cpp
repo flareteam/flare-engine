@@ -1085,6 +1085,7 @@ bool MenuInventory::buy(ItemStack stack, int tab, bool dragging) {
 			for (size_t i = 0; i < item->crafting_items.size(); ++i) {
 				remove(item->crafting_items[i].item, item->crafting_items[i].quantity * stack.quantity);
 			}
+			items->playCraftSound(stack.item);
 		}
 		else {
 			removeCurrency(count);

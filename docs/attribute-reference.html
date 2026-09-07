@@ -1124,6 +1124,10 @@ code {
 
 <p><strong>soundfx</strong> | <code>filename</code> | Sound effect filename to play for the specific item.</p>
 
+<p><strong>soundfx_craft</strong> | <code>filename</code> | Sound effect filename to play when crafting this item in the Vendor menu's Craft tab.</p>
+
+<p><strong>soundfx_craft_override</strong> | <code>boolean</code> | If false (the default), this item's soundfx_craft will play in unison with the Vendor's soundfx_craft. Otherwise, only this item's soundfx_craft will play.</p>
+
 <p><strong>gfx</strong> | <code>filename</code> | Filename of an animation set to display when the item is equipped.</p>
 
 <p><strong>loot_animation</strong> | <code>repeatable(filename, int, int) : Loot image, Min quantity, Max quantity</code> | Specifies the loot animation file for the item. The max quantity, or both quantity values, may be omitted.</p>
@@ -1959,6 +1963,8 @@ code {
 <p><strong>sort_stock_buy</strong> | <code>["none", "type", "quality", "level", "price", "id"]</code> | Sorts all vendors' "Buy" stock by the given metric.</p>
 
 <p><strong>sort_stock_craft</strong> | <code>["none", "type", "quality", "level", "price", "id"]</code> | Sorts all vendors' "Craft" stock by the given metric.</p>
+
+<p><strong>soundfx_craft</strong> | <code>filename</code> | Filename of the default sound to play when crafting an item on from the Craft tab.</p>
 
 <hr />
 

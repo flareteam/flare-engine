@@ -338,6 +338,7 @@ Item::Item()
 	, book_is_readable(true)
 	, quest_item(false)
 	, is_foreign(true)
+	, sfx_craft_override(false)
 	, level(0)
 	, icon(0)
 	, max_quantity(INT_MAX)
@@ -346,6 +347,7 @@ Item::Item()
 	, parent(0)
 	, set(0)
 	, sfx_id(0)
+	, sfx_craft_id(0)
 	, power(0)
 	, type(0)
 	, quality(0)
@@ -355,6 +357,7 @@ Item::Item()
 	, book("")
 	, requires_class("")
 	, sfx("")
+	, sfx_craft("")
 	, gfx("")
 	, power_desc("")
 	, pickup_status("")
@@ -626,6 +629,15 @@ void ItemManager::loadItems(const std::string& filename) {
 			// @ATTR soundfx|filename|Sound effect filename to play for the specific item.
 			item->sfx = infile.val;
 			item->sfx_id = snd->load(item->sfx, "ItemManager");
+		}
+		else if (infile.key == "soundfx_craft") {
+			// @ATTR soundfx_craft|filename|Sound effect filename to play when crafting this item in the Vendor menu's Craft tab.
+			item->sfx_craft = infile.val;
+			item->sfx_craft_id = snd->load(item->sfx_craft, "ItemManager");
+		}
+		else if (infile.key == "soundfx_craft_override") {
+			// @ATTR soundfx_craft_override|boolean|If false (the default), this item's soundfx_craft will play in unison with the Vendor's soundfx_craft. Otherwise, only this item's soundfx_craft will play.
+			item->sfx_craft_override = Parse::toBool(infile.val);
 		}
 		else if (infile.key == "gfx")
 			// @ATTR gfx|filename|Filename of an animation set to display when the item is equipped.
@@ -1340,6 +1352,24 @@ void ItemManager::playSound(ItemID item, const Point& pos) {
 	std::stringstream channel_name;
 	channel_name << "item_" << items[item]->sfx_id;
 	snd->play(items[item]->sfx_id, channel_name.str(), FPoint(pos), false);
+}
+
+void ItemManager::playCraftSound(ItemID item, const Point& pos) {
+	if (!isValid(item))
+		return;
+
+	if (items[item]->sfx_craft_id != 0) {
+		std::stringstream channel_name;
+		channel_name << "item_" << items[item]->sfx_craft_id;
+		snd->play(items[item]->sfx_craft_id, channel_name.str(), FPoint(pos), false);
+
+		if (items[item]->sfx_craft_override)
+			return;
+	}
+
+	if (menu && menu->vendor && menu->vendor->soundfx_craft != 0) {
+		snd->play(menu->vendor->soundfx_craft, "vendor_craft", FPoint(pos), false);
+	}
 }
 
 TooltipData ItemManager::getShortTooltip(ItemStack stack) {

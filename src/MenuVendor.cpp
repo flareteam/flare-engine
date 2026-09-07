@@ -57,6 +57,7 @@ MenuVendor::MenuVendor()
 	, npc(NULL)
 	, buyback_stock()
 	, sell_enabled(true)
+	, soundfx_craft(0)
 {
 	tabControl->setupTab(ItemManager::VENDOR_BUY, msg->get("Inventory"), &tablist_tabs[ItemManager::VENDOR_BUY]);
 	tabControl->setupTab(ItemManager::VENDOR_SELL, msg->get("Buyback"), &tablist_tabs[ItemManager::VENDOR_SELL]);
@@ -121,6 +122,10 @@ MenuVendor::MenuVendor()
 					sort_stock_craft = ItemStorage::SORT_BUY_PRICE;
 				else if (infile.val == "id")
 					sort_stock_craft = ItemStorage::SORT_ID;
+			}
+			// @ATTR soundfx_craft|filename|Filename of the default sound to play when crafting an item on from the Craft tab.
+			else if (infile.key == "soundfx_craft") {
+				soundfx_craft = snd->load(infile.val, "Vendor craft");
 			}
 			else {
 				infile.error("MenuVendor: '%s' is not a valid key.", infile.key.c_str());

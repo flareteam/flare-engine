@@ -39,6 +39,10 @@ Engine features:
 	- Shield effects now display time remaining (if the effect has a duration) in their active effect icon tooltip.
 	- Tooltips for Character menu upgrade buttons now show bonuses that will be applied to minor stats.
 
+* Sound
+	- Added 'soundfx_craft' and 'soundfx_craft_override' properties to Items.
+	- Added 'soundfx_craft' property to menus/vendor.txt config.
+
 * System
 	- Add "Minimum Render Size" video setting.
 	- Added 'raycast_resolution' property to engine/misc.txt config.

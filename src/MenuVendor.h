@@ -89,6 +89,8 @@ public:
 	TabList tablist_tabs[TAB_COUNT];
 
 	bool sell_enabled;
+
+	SoundID soundfx_craft;
 };
 
 

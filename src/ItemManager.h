@@ -262,6 +262,7 @@ public:
 	bool book_is_readable; // whether to display "use" or "read" in the tooltip
 	bool quest_item;
 	bool is_foreign; // used to track extended items for clean up during save
+	bool sfx_craft_override;
 
 	int level;            // rough estimate of quality, used in the loot algorithm
 	int icon;             // icon index on small pixel sheet
@@ -272,6 +273,7 @@ public:
 	ItemID parent;
 	ItemSetID set;              // item can be attached to item set
 	SoundID sfx_id;
+	SoundID sfx_craft_id;
 	PowerID power;            // this item can be dragged to the action bar and used as a power
 	size_t type;     // equipment slot or base item type. An index into ItemManager::item_types
 	size_t quality;  // An index into ItemManager::item_qualities
@@ -284,6 +286,7 @@ public:
 	std::string book;     // book file location
 	std::string requires_class;
 	std::string sfx;           // the item sound when it hits the floor or inventory, etc
+	std::string sfx_craft;     // the item sound when crafted in the Vendor menu
 	std::string gfx;           // the sprite layer shown when this item is equipped
 	std::string power_desc;    // shows up in green text on the tooltip
 	std::string pickup_status; // when this item is picked up, set a campaign state (usually for quest items)
@@ -353,6 +356,7 @@ public:
 	bool isValid(ItemID item_id);
 	bool isValidSet(ItemSetID set_id);
 	void playSound(ItemID item, const Point& pos = Point(0,0));
+	void playCraftSound(ItemID item, const Point& pos = Point(0,0));
 	TooltipData getTooltip(ItemStack stack, StatBlock *stats, int context, bool input_hint);
 	TooltipData getShortTooltip(ItemStack item);
 	std::string getItemName(ItemID id);
