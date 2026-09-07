@@ -455,8 +455,13 @@ void MenuManager::logic() {
 							max_quantity = std::min(max_quantity, drag_stack.quantity);
 
 						if (max_quantity >= 1) {
-							num_picker->setValueBounds(1, max_quantity);
-							num_picker->visible = true;
+							if (max_quantity == 1 && vendor->getTab() == ItemManager::VENDOR_CRAFT) {
+								vendor->removeFromPrevSlot(drag_stack.quantity);
+							}
+							else {
+								num_picker->setValueBounds(1, max_quantity);
+								num_picker->visible = true;
+							}
 						}
 						else {
 							vendor->removeFromPrevSlot(drag_stack.quantity);
@@ -1033,8 +1038,18 @@ void MenuManager::logic() {
 								max_quantity = std::min(max_quantity, drag_stack.quantity);
 
 							if (max_quantity >= 1) {
-								num_picker->setValueBounds(1, max_quantity);
-								num_picker->visible = true;
+								if (vendor->getTab() == ItemManager::VENDOR_CRAFT && max_quantity == 1) {
+									if (!inv->buy(drag_stack, vendor->getTab(), !MenuInventory::IS_DRAGGING)) {
+										vendor->itemReturn(inv->drop_stack.front());
+										inv->drop_stack.pop();
+									}
+									drag_stack.clear();
+									resetDrag();
+								}
+								else {
+									num_picker->setValueBounds(1, max_quantity);
+									num_picker->visible = true;
+								}
 							}
 							else {
 								drag_stack.clear();
