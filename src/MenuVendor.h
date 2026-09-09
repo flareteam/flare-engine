@@ -37,6 +37,8 @@ class WidgetTooltip;
 
 class MenuVendor : public Menu {
 private:
+	void enablePurchasableSlots();
+
 	WidgetButton *closeButton;
 	WidgetTabControl *tabControl;
 	WidgetLabel label_vendor;

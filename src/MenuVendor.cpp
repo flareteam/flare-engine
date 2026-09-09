@@ -30,6 +30,8 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "ItemManager.h"
 #include "ItemStorage.h"
 #include "Menu.h"
+#include "MenuInventory.h"
+#include "MenuManager.h"
 #include "MenuVendor.h"
 #include "MessageEngine.h"
 #include "NPC.h"
@@ -222,6 +224,8 @@ void MenuVendor::logic() {
 		setNPC(NULL);
 		snd->play(sfx_close, snd->DEFAULT_CHANNEL, snd->NO_POS, !snd->LOOP);
 	}
+
+	enablePurchasableSlots();
 }
 
 void MenuVendor::setTab(int tab) {
@@ -383,6 +387,8 @@ void MenuVendor::setNPC(NPC* _npc) {
 		npc->playSoundIntro();
 	}
 
+	enablePurchasableSlots();
+
 	align();
 }
 
@@ -434,6 +440,17 @@ void MenuVendor::defocusTabLists() {
 void MenuVendor::resetDrag() {
 	for (int i = 0; i < TAB_COUNT; ++i) {
 		stock[i].drag_prev_slot = -1;
+	}
+}
+
+void MenuVendor::enablePurchasableSlots() {
+	// disable slots for items that the player can't afford
+	if (menu && menu->inv) {
+		for (int i = 0; i < TAB_COUNT; ++i) {
+			for (unsigned j = 0; j < VENDOR_SLOTS; ++j) {
+				stock[i].slots[j]->enabled = (stock[i][j].empty() || menu->inv->getMaxPurchasable(stock[i][j], i) > 0);
+			}
+		}
 	}
 }
 

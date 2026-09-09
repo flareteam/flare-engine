@@ -142,7 +142,7 @@ ItemStack MenuItemStorage::click(const Point& position) {
 		}
 	}
 
-	if (drag_prev_slot > -1) {
+	if (drag_prev_slot > -1 && slots[drag_prev_slot]->enabled) {
 		item = storage[drag_prev_slot];
 		if (inpt->mode == InputState::MODE_TOUCHSCREEN) {
 			if (!slots[drag_prev_slot]->in_focus && !item.empty()) {
