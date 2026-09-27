@@ -1122,6 +1122,9 @@ void GameStateLoad::setSelectedSlot(int slot) {
 		game_slots[slot]->stats.direction = 6;
 		game_slots[slot]->preview_turn_timer.reset(Timer::BEGIN);
 		game_slots[slot]->preview.setAnimation("run");
+
+		// play run cycle twice before turning
+		game_slots[slot]->preview_turn_timer.setDuration(game_slots[slot]->preview.getAnimationDuration() * 2);
 	}
 
 	selected_slot = slot;

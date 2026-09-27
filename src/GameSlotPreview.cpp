@@ -261,6 +261,13 @@ void GameSlotPreview::loadGraphicsFromInventory(MenuInventory* menu_inv) {
 	loadGraphics(preview_gfx);
 }
 
+unsigned GameSlotPreview::getAnimationDuration() {
+	if (activeAnimation)
+		return activeAnimation->getDuration();
+
+	return 0;
+}
+
 GameSlotPreview::~GameSlotPreview() {
 	anim->decreaseCount("animations/hero.txt");
 	if (activeAnimation)

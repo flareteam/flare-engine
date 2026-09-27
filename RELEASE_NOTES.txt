@@ -80,6 +80,7 @@ Engine fixes:
 	- Fixed being able to swap equipment sets while paused.
 	- Fixed actionbar cooldowns animations showing when power wouldn't be able to be used for other reasons.
 	- Fixed crash in Powers menu when trying to load an invalid Power ID.
+	- Player sprites on the load game screen now rotate a speed appropriate for their run cycle.
 
 * Sound
 	- Fix menu close sound effect not playing when closing Char/Inv/Pow/Log menu with the Cancel key.

@@ -61,6 +61,7 @@ public:
 	void render();
 	void loadDefaultGraphics();
 	void loadGraphicsFromInventory(MenuInventory* menu_inv);
+	unsigned getAnimationDuration();
 
 	Animation *activeAnimation;
 	AnimationSet *animationSet;
