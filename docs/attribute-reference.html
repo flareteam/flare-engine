@@ -2020,6 +2020,8 @@ code {
 
 <p><strong>dialog.response_only</strong> | <code>bool</code> | If true, this dialog topic will only appear when explicitly referenced with the "response" key.</p>
 
+<p><strong>dialog.visual_effect</strong> | <code>predefined_string</code> | This dialog node will trigger a visual effect by its ID.</p>
+
 <p><strong>npc.name</strong> | <code>string</code> | NPC's name.</p>
 
 <p><strong>npc.direction</strong> | <code>direction</code> | The direction to use for this NPC's stance animation.</p>
@@ -2065,6 +2067,20 @@ code {
 <p><strong>npc.vendor_gamble_buy</strong> | <code>boolean</code> | If true (the default is false), the damage, absorb and bonuses for randomized items on the Buy tab will be hidden until purchase.</p>
 
 <p><strong>npc.vendor_gamble_craft</strong> | <code>boolean</code> | If true (the default is false), the damage, absorb and bonuses for randomized items on the Craft tab will be hidden until purchase.</p>
+
+<p><strong>visual_effect.id</strong> | <code>string</code> | An identifer for this visual effect. Required.</p>
+
+<p><strong>visual_effect.animation</strong> | <code>filename</code> | The animation that will be played when this visual effect is triggered. Required.</p>
+
+<p><strong>visual_effect.render_above</strong> | <code>boolean</code> | Determines if the animation is rendered above or below the NPC. Defaults to true.</p>
+
+<p><strong>visual_effect.automatic</strong> | <code>boolean</code> | Determines if the visual effect will be applied automatically without having to be triggered from a dialog node. Defaults to false.</p>
+
+<p><strong>visual_effect.duration</strong> | <code>duration</code> | Sets how long the visual effect will last.</p>
+
+<p><strong>visual_effect.requires_status</strong> | <code>repeatable(list(predefined_string))</code> | A list of campaign statuses that are required to be set in order to trigger this visual effect.</p>
+
+<p><strong>visual_effect.requires_not_status</strong> | <code>repeatable(list(predefined_string))</code> | A list of campaign statuses that are required to be not set in order to trigger this visual effect.</p>
 
 <hr />
 

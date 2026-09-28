@@ -39,10 +39,34 @@ private:
 		VOX_QUEST = 1,
 	};
 
+	class VisualEffect {
+	public:
+		std::string id;
+		std::string animation;
+		bool is_active;
+		bool render_above;
+		bool automatic;
+		int duration;
+		std::vector<StatusID> requires_status;
+		std::vector<StatusID> requires_not_status;
+
+		VisualEffect()
+			: id("")
+			, animation("")
+			, is_active(false)
+			, render_above(true)
+			, automatic(false)
+			, duration(0)
+			, requires_status()
+			, requires_not_status()
+		{}
+	};
+
 	void loadGraphics();
 	int loadSound(const std::string& fname, int vox_type);
 	bool isDialogType(const int &event_type);
 	bool playSoundQuest(int id);
+	bool checkVisualEffectStatuses(size_t index);
 
 	std::string gfx; // filename of sprite.
 
@@ -60,6 +84,8 @@ private:
 	// vocals
 	std::vector<SoundID> vox_intro;
 	std::vector<SoundID> vox_quests;
+
+	std::vector<VisualEffect> visual_effects;
 
 public:
 	static const int VENDOR_MAX_STOCK = 80;

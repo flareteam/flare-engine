@@ -1560,7 +1560,9 @@ void PowerManager::buff(PowerID power_index, StatBlock *src_stats, const FPoint&
 	// otherwise the post power will chain off the hazard itself
 	// this is also where Effects are removed for non-hazard powers
 	if (!power->use_hazard) {
-		src_stats->effects.removeEffectID(power->remove_effects);
+		for (size_t i = 0; i < power->remove_effects.size(); ++i) {
+			src_stats->effects.removeEffectID(power->remove_effects[i].first, power->remove_effects[i].second);
+		}
 
 		if (!power->passive) {
 			for (size_t i = 0; i < power->chain_powers.size(); ++i) {

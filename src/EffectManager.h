@@ -102,6 +102,7 @@ public:
 	bool ignore_resist;
 	bool damage_is_typed;
 	size_t damage_type;
+	bool expire_with_animation;
 };
 
 class EffectDef {
@@ -123,6 +124,7 @@ public:
 	bool ignore_resist;
 	bool damage_is_typed;
 	size_t damage_type;
+	bool expire_with_animation;
 
 	bool is_immunity_type; // handling of deprecated types
 };
@@ -151,7 +153,7 @@ public:
 	void addEffect(StatBlock* stats, EffectDef &effect, EffectParams &params);
 	void removeEffectType(const int type);
 	void removeEffectPassive(size_t id);
-	void removeEffectID(const std::vector< std::pair<std::string, int> >& remove_effects);
+	void removeEffectID(const std::string& id, int count);
 	void clearEffects();
 	void clearNegativeEffects(int type);
 	void clearItemEffects();

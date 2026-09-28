@@ -18,6 +18,7 @@ Engine features:
 	- Added several properties to set the stock of the NPC vendor Craft tab.
 	- Added 'vendor_tab_enabled' property to NPCs.
 	- Added 'disabled' option to 'combat_style' StatBlock property.
+	- Added 'visual_effect' to NPCs for showing quest markers, emotes, etc.
 
 * Powers
 	- Added 'meta_power_provides_tooltip' property to Powers.

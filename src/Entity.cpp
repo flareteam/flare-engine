@@ -616,7 +616,9 @@ bool Entity::takeHit(Hazard &h) {
 		}
 
 		// remove effect by ID
-		stats.effects.removeEffectID(h.power->remove_effects);
+		for (size_t i = 0; i < h.power->remove_effects.size(); ++i) {
+			stats.effects.removeEffectID(h.power->remove_effects[i].first, h.power->remove_effects[i].second);
+		}
 
 		// post power
 		for (size_t i = 0; i < h.power->chain_powers.size(); ++i) {

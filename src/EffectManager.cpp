@@ -51,6 +51,7 @@ EffectDef::EffectDef()
 	, ignore_resist(false)
 	, damage_is_typed(false)
 	, damage_type(0)
+	, expire_with_animation(false)
 	, is_immunity_type(false) {
 }
 
@@ -85,7 +86,8 @@ Effect::Effect()
 	, is_multiplier(false)
 	, ignore_resist(false)
 	, damage_is_typed(false)
-	, damage_type(0) {
+	, damage_type(0)
+	, expire_with_animation(false) {
 }
 
 Effect::Effect(const Effect& other) {
@@ -123,6 +125,7 @@ Effect& Effect::operator=(const Effect& other) {
 	ignore_resist = other.ignore_resist;
 	damage_is_typed = other.damage_is_typed;
 	damage_type = other.damage_type;
+	expire_with_animation = other.expire_with_animation;
 
 	return *this;
 }
@@ -505,7 +508,7 @@ void EffectManager::logic() {
 		// expire effects based on animations
 		if ((ei.animation && ei.animation->isLastFrame()) || !ei.animation) {
 			// @TYPE heal|Restore HP based on Mental damage stat.
-			if (ei.type == Effect::HEAL) {
+			if (ei.type == Effect::HEAL || ei.expire_with_animation) {
 				removeEffect(i);
 				i--;
 				continue;
@@ -638,6 +641,7 @@ void EffectManager::addEffect(StatBlock* stats, EffectDef &effect, EffectParams 
 	e.ignore_resist = effect.ignore_resist;
 	e.damage_is_typed = effect.damage_is_typed;
 	e.damage_type = effect.damage_type;
+	e.expire_with_animation = effect.expire_with_animation;
 
 	if (!effect.animation.empty()) {
 		e.loadAnimation(effect.animation);
@@ -684,19 +688,16 @@ void EffectManager::removeEffectPassive(size_t id) {
 	}
 }
 
-void EffectManager::removeEffectID(const std::vector< std::pair<std::string, int> >& remove_effects) {
-	for (size_t i = 0; i < remove_effects.size(); i++) {
-		int count = remove_effects[i].second;
-		bool remove_all = (count == 0 ? true : false);
+void EffectManager::removeEffectID(const std::string& id, int count) {
+	bool remove_all = (count == 0 ? true : false);
 
-		for (size_t j = effect_list.size(); j > 0; j--) {
-			if (!remove_all && count <= 0)
-				break;
+	for (size_t i = effect_list.size(); i > 0; i--) {
+		if (!remove_all && count <= 0)
+			break;
 
-			if (effect_list[j-1].id == remove_effects[i].first) {
-				removeEffect(j-1);
-				count--;
-			}
+		if (effect_list[i-1].id == id) {
+			removeEffect(i-1);
+			count--;
 		}
 	}
 }

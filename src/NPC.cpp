@@ -37,6 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedGameResources.h"
 #include "SharedResources.h"
 #include "SoundManager.h"
+#include "Utils.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
 #include <vector>
@@ -84,6 +85,8 @@ bool NPC::load(const std::string& npc_id) {
 	FileParser infile;
 	ItemStack stack;
 
+	VisualEffect *vfx = NULL;
+
 	portrait_filenames.resize(1);
 
 	// @CLASS NPC|Description of NPCs in npcs/
@@ -92,6 +95,10 @@ bool NPC::load(const std::string& npc_id) {
 		bool clear_craft_random_table = true;
 
 		while (infile.next()) {
+			if (infile.new_section && infile.section != "visual_effect") {
+				vfx = NULL;
+			}
+
 			if (infile.section == "stats") {
 				// handled by StatBlock::load()
 				continue;
@@ -165,6 +172,11 @@ bool NPC::load(const std::string& npc_id) {
 					// @ATTR dialog.response_only|bool|If true, this dialog topic will only appear when explicitly referenced with the "response" key.
 					e.type = EventComponent::NPC_DIALOG_RESPONSE_ONLY;
 					e.data[0].Bool = Parse::toBool(infile.val);
+				}
+				else if (infile.key == "visual_effect") {
+					// @ATTR dialog.visual_effect|predefined_string|This dialog node will trigger a visual effect by its ID.
+					e.type = EventComponent::NPC_VISUAL_EFFECT;
+					e.s = "_npc_vfx_" + infile.val;
 				}
 				else {
 					Event ev;
@@ -373,6 +385,50 @@ bool NPC::load(const std::string& npc_id) {
 					infile.error("NPC: '%s' is not a valid key.", infile.key.c_str());
 				}
 			}
+			else if (infile.section == "visual_effect") {
+				if (infile.new_section) {
+					visual_effects.resize(visual_effects.size() + 1);
+					vfx = &visual_effects.back();
+				}
+
+				if (vfx) {
+					if (infile.key == "id") {
+						// @ATTR visual_effect.id|string|An identifer for this visual effect. Required.
+						vfx->id = "_npc_vfx_" + infile.val;
+					}
+					else if (infile.key == "animation") {
+						// @ATTR visual_effect.animation|filename|The animation that will be played when this visual effect is triggered. Required.
+						vfx->animation = infile.val;
+					}
+					else if (infile.key == "render_above") {
+						// @ATTR visual_effect.render_above|boolean|Determines if the animation is rendered above or below the NPC. Defaults to true.
+						vfx->render_above = Parse::toBool(infile.val);
+					}
+					else if (infile.key == "automatic") {
+						// @ATTR visual_effect.automatic|boolean|Determines if the visual effect will be applied automatically without having to be triggered from a dialog node. Defaults to false.
+						vfx->automatic = Parse::toBool(infile.val);
+					}
+					else if (infile.key == "duration") {
+						// @ATTR visual_effect.duration|duration|Sets how long the visual effect will last.
+						vfx->duration = Parse::toDuration(infile.val);
+					}
+					else if (infile.key == "requires_status") {
+						// @ATTR visual_effect.requires_status|repeatable(list(predefined_string))|A list of campaign statuses that are required to be set in order to trigger this visual effect.
+						while (infile.val != "") {
+							vfx->requires_status.push_back(camp->registerStatus(Parse::popFirstString(infile.val)));
+						}
+					}
+					else if (infile.key == "requires_not_status") {
+						// @ATTR visual_effect.requires_not_status|repeatable(list(predefined_string))|A list of campaign statuses that are required to be not set in order to trigger this visual effect.
+						while (infile.val != "") {
+							vfx->requires_not_status.push_back(camp->registerStatus(Parse::popFirstString(infile.val)));
+						}
+					}
+					else {
+						infile.error("NPC: '%s' is not a valid key.", infile.key.c_str());
+					}
+				}
+			}
 		}
 		infile.close();
 	}
@@ -425,6 +481,17 @@ bool NPC::load(const std::string& npc_id) {
 		}
 	}
 
+	for (size_t i = visual_effects.size(); i > 0; i--) {
+		if (visual_effects[i-1].id.empty()) {
+			Utils::logError("[%s] NPC: Removing visual effect with no 'id' property.", full_filename.c_str());
+			visual_effects.erase(visual_effects.begin() + (i-1));
+		}
+		else if (visual_effects[i-1].animation.empty()) {
+			Utils::logError("[%s] NPC: Removing visual effect with no 'animation' property.", full_filename.c_str());
+			visual_effects.erase(visual_effects.begin() + (i-1));
+		}
+	}
+
 	return true;
 }
 
@@ -470,6 +537,36 @@ int NPC::loadSound(const std::string& fname, int vox_type) {
 
 void NPC::logic() {
 	mapr->collider.unblock(stats.pos.x, stats.pos.y);
+
+	// add visual effects
+	for (size_t i = 0; i < visual_effects.size(); ++i) {
+		VisualEffect *vfx = &visual_effects[i];
+
+		if (!vfx->automatic)
+			continue;
+
+		bool status_good = checkVisualEffectStatuses(i);
+
+		if (!vfx->is_active && status_good) {
+			vfx->is_active = true;
+
+			EffectDef ed;
+			ed.id = vfx->id;
+			ed.animation = vfx->animation;
+			ed.render_above = vfx->render_above;
+			ed.can_stack = false;
+
+			EffectParams ep;
+			ep.duration = vfx->duration;
+
+			stats.effects.addEffect(&stats, ed, ep);
+			stats.encountered = true;
+		}
+		else if (vfx->is_active && !status_good) {
+			stats.effects.removeEffectID(vfx->id, 0);
+			vfx->is_active = false;
+		}
+	}
 
 	Entity::logic();
 	moveMapEvents();
@@ -780,6 +877,33 @@ bool NPC::processDialog(unsigned int dialog_node, unsigned int &event_cursor) {
 				}
 			}
 		}
+		else if (dialog[dialog_node][event_cursor].type == EventComponent::NPC_VISUAL_EFFECT) {
+			std::string effect_id = dialog[dialog_node][event_cursor].s;
+
+			for (size_t i = 0; i < visual_effects.size(); ++i) {
+				VisualEffect *vfx = &visual_effects[i];
+
+				if (vfx->id != effect_id)
+					continue;
+
+				if (checkVisualEffectStatuses(i)) {
+					EffectDef ed;
+					ed.id = vfx->id;
+					ed.animation = vfx->animation;
+					ed.render_above = vfx->render_above;
+					ed.can_stack = false;
+					ed.expire_with_animation = true;
+
+					EffectParams ep;
+					ep.duration = vfx->duration;
+
+					stats.effects.addEffect(&stats, ed, ep);
+					stats.encountered = true;
+				}
+
+				break;
+			}
+		}
 		else if (dialog[dialog_node][event_cursor].type == EventComponent::NONE) {
 			// conversation ends
 			return false;
@@ -810,6 +934,33 @@ void NPC::processEvent(unsigned int dialog_node, unsigned int cursor) {
 
 bool NPC::isDialogType(const int &event_type) {
 	return event_type == EventComponent::NPC_DIALOG_THEM || event_type == EventComponent::NPC_DIALOG_YOU;
+}
+
+bool NPC::checkVisualEffectStatuses(size_t index) {
+	if (index >= visual_effects.size())
+		return false;
+
+	VisualEffect *vfx = &visual_effects[index];
+
+	bool status_good = true;
+	if (!vfx->requires_status.empty() || !vfx->requires_not_status.empty()) {
+		for (size_t j = 0; j < vfx->requires_status.size(); ++j) {
+			if (!camp->checkStatus(vfx->requires_status[j])) {
+				status_good = false;
+				break;
+			}
+		}
+		if (status_good) {
+			for (size_t j = 0; j < vfx->requires_not_status.size(); ++j) {
+				if (camp->checkStatus(vfx->requires_not_status[j])) {
+					status_good = false;
+					break;
+				}
+			}
+		}
+	}
+
+	return status_good;
 }
 
 NPC::~NPC() {

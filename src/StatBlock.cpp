@@ -588,6 +588,7 @@ bool StatBlock::loadAnimationSlotStat(FileParser *infile) {
 bool StatBlock::isNPCStat(FileParser *infile) {
 	if (infile->section == "npc") return true;
 	else if (infile->section == "dialog") return true;
+	else if (infile->section == "visual_effect") return true;
 
 	if (infile->key == "gfx") {
 		infile->error("StatBlock: Warning! 'gfx' is deprecated. Use 'animations' instead.");
