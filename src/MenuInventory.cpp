@@ -997,13 +997,30 @@ bool MenuInventory::remove(ItemID item, int quantity) {
 		activated_item = 0;
 		activated_slot = -1;
 	}
-	else if(!inventory[CARRIED].remove(item, quantity)) {
-		if (!inventory[EQUIPMENT].remove(item, quantity)) {
-			return false;
+	else {
+		int count_equipment = inventory[EQUIPMENT].count(item);
+		int count_carried = inventory[CARRIED].count(item);
+
+		if (quantity <= count_carried) {
+			if (!inventory[CARRIED].remove(item, quantity))
+				return false;
+		}
+		else if (quantity <= count_equipment) {
+			if (!inventory[EQUIPMENT].remove(item, quantity))
+				return false;
+		}
+		else if (quantity <= count_carried + count_equipment) {
+			if (!inventory[CARRIED].remove(item, count_carried))
+				return false;
+
+			if (!inventory[EQUIPMENT].remove(item, quantity - count_carried))
+				return false;
 		}
 		else {
-			applyEquipment();
+			return false;
 		}
+
+		applyEquipment();
 	}
 
 	return true;
