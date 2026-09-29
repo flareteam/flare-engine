@@ -1331,6 +1331,10 @@ bool StatBlock::canUsePower(PowerID powerid, bool allow_passive) const {
 		// needed to unlock shapeshifter powers
 		return mp >= power->requires_mp;
 	}
+	else if (hero && pc && !pc->allow_movement && (power->charge_speed != 0 || power->buff_teleport)) {
+		// if the player can't move normally, don't allow powers that can move the player
+		return false;
+	}
 	else {
 		return (
 			powers->checkPowerCost(power, this)
