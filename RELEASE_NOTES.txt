@@ -84,6 +84,7 @@ Engine fixes:
 	- Player sprites on the load game screen now rotate a speed appropriate for their run cycle.
 	- Fix incorrect amount of items being removed when removing from both the player's equipment and bag at the same time.
 	- Fix checking of item counts to include both equipment and bag, as opposed to only counting in one or the other.
+	- Fix active effect icons being split when they should be grouped if added out of order.
 
 * Sound
 	- Fix menu close sound effect not playing when closing Char/Inv/Pow/Log menu with the Cancel key.

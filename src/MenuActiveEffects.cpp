@@ -110,44 +110,51 @@ void MenuActiveEffects::logic() {
 		if (ed.icon == -1)
 			continue;
 
-		size_t most_recent_id = effect_icons.size()-1;
-
 		if (ed.group_stack && effect_icons.size() > 0) {
-			EffectIcon& eicon = effect_icons[most_recent_id];
-			if (eicon.type == ed.type && eicon.name == ed.name && eicon.icon == ed.icon) {
+			bool grouped_icon = false;
 
-				eicon.stacks++;
+			for (size_t j = 0; j < effect_icons.size(); ++j) {
+				EffectIcon& eicon = effect_icons[j];
 
-				eicon.timer_current = ed.timer.getCurrent();
-				eicon.timer_max = ed.timer.getDuration();
+				if (eicon.type == ed.type && eicon.name == ed.name && eicon.icon == ed.icon) {
 
-				if (ed.type == Effect::SHIELD){
-					//Shields stacks in momment of addition, we never have to reach that
-				} else if (ed.type == Effect::HEAL){
-					//No special behavior
-				} else{
-					if (ed.timer.getCurrent() < static_cast<unsigned>(eicon.current)){
-						if (ed.timer.getDuration() > 0)
-							eicon.overlay.y = (eset->resolutions.icon_size * ed.timer.getCurrent()) / ed.timer.getDuration();
-						else
-							eicon.overlay.y = eset->resolutions.icon_size;
-						eicon.current = eicon.timer_current;
-						eicon.max = eicon.timer_max;
+					eicon.stacks++;
+
+					eicon.timer_current = ed.timer.getCurrent();
+					eicon.timer_max = ed.timer.getDuration();
+
+					if (ed.type == Effect::SHIELD){
+						//Shields stacks in momment of addition, we never have to reach that
+					} else if (ed.type == Effect::HEAL){
+						//No special behavior
+					} else{
+						if (ed.timer.getCurrent() < static_cast<unsigned>(eicon.current)){
+							if (ed.timer.getDuration() > 0)
+								eicon.overlay.y = (eset->resolutions.icon_size * ed.timer.getCurrent()) / ed.timer.getDuration();
+							else
+								eicon.overlay.y = eset->resolutions.icon_size;
+							eicon.current = eicon.timer_current;
+							eicon.max = eicon.timer_max;
+						}
 					}
+
+					if (!eicon.stacksLabel){
+						eicon.stacksLabel = new WidgetLabel();
+						eicon.stacksLabel->setPos(eicon.pos.x, eicon.pos.y);
+						eicon.stacksLabel->setMaxWidth(eset->resolutions.icon_size);
+					}
+
+					std::stringstream ss;
+					ss << "×" << eicon.stacks;
+					eicon.stacksLabel->setText(ss.str());
+
+					grouped_icon = true;
+					break;
 				}
-
-				if (!eicon.stacksLabel){
-					eicon.stacksLabel = new WidgetLabel();
-					eicon.stacksLabel->setPos(eicon.pos.x, eicon.pos.y);
-					eicon.stacksLabel->setMaxWidth(eset->resolutions.icon_size);
-				}
-
-				std::stringstream ss;
-				ss << "×" << eicon.stacks;
-				eicon.stacksLabel->setText(ss.str());
-
-				continue;
 			}
+
+			if (grouped_icon)
+				continue;
 		}
 
 		EffectIcon ei;
