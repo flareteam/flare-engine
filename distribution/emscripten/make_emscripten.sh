@@ -41,6 +41,7 @@ emcc \
 	-s USE_SDL_TTF=2 \
 	-s USE_SDL_MIXER=2 \
 	-s "EXPORTED_RUNTIME_METHODS=['print']" \
+	-s DEFAULT_TO_CXX \
 	-lidbfs.js \
 	--preload-file mods \
 	--use-preload-cache \
