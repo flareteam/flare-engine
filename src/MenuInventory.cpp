@@ -1001,6 +1001,8 @@ bool MenuInventory::remove(ItemID item, int quantity) {
 		int count_equipment = inventory[EQUIPMENT].count(item);
 		int count_carried = inventory[CARRIED].count(item);
 
+		bool update_equipment = false;
+
 		if (quantity <= count_carried) {
 			if (!inventory[CARRIED].remove(item, quantity))
 				return false;
@@ -1008,6 +1010,8 @@ bool MenuInventory::remove(ItemID item, int quantity) {
 		else if (quantity <= count_equipment) {
 			if (!inventory[EQUIPMENT].remove(item, quantity))
 				return false;
+			else
+				update_equipment = true;
 		}
 		else if (quantity <= count_carried + count_equipment) {
 			if (!inventory[CARRIED].remove(item, count_carried))
@@ -1015,12 +1019,16 @@ bool MenuInventory::remove(ItemID item, int quantity) {
 
 			if (!inventory[EQUIPMENT].remove(item, quantity - count_carried))
 				return false;
+			else
+				update_equipment = true;
 		}
 		else {
 			return false;
 		}
 
-		applyEquipment();
+		if (update_equipment) {
+			applyEquipment();
+		}
 	}
 
 	return true;
