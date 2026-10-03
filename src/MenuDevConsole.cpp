@@ -51,6 +51,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 
 #include <limits>
 #include <math.h>
+#include <sstream>
 
 MenuDevConsole::MenuDevConsole()
 	: Menu()
@@ -522,11 +523,19 @@ void MenuDevConsole::execute() {
 			matching_ids.push_back(i);
 		}
 
+		std::stringstream ss;
+
 		if (!matching_ids.empty()) {
 			log_history->setMaxMessages(static_cast<unsigned>(matching_ids.size()));
 
 			for (size_t i=matching_ids.size(); i>0; i--) {
-				log_history->add(status_strings[matching_ids[i-1]], WidgetLog::MSG_NORMAL);
+				const Status &status = camp->getStatusByID(status_strings[matching_ids[i-1]]);
+				ss.str("");
+				if (status.is_expression)
+					ss << status.id << " = " << status.value;
+				else
+					ss << status.id;
+				log_history->add(ss.str(), WidgetLog::MSG_NORMAL);
 			}
 
 			log_history->setMaxMessages(WidgetLog::MAX_MESSAGES); // reset

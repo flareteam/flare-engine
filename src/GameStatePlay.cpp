@@ -98,6 +98,9 @@ GameStatePlay::GameStatePlay()
 	camp = new CampaignManager();
 	eventm = new EventManager();
 
+	// couldn't do this before camp and eventm were initizlied
+	items->parsePickupStatuses();
+
 	loot = new LootManager();
 	powers = new PowerManager();
 	fow = new FogOfWar();
@@ -279,8 +282,10 @@ void GameStatePlay::checkLoot() {
 	if (!pickup.empty()) {
 		menu->inv->add(pickup, MenuInventory::CARRIED, ItemStorage::NO_SLOT, MenuInventory::ADD_PLAY_SOUND, MenuInventory::ADD_AUTO_EQUIP);
 		if (items->isValid(pickup.item)) {
-			StatusID pickup_status = camp->registerStatus(items->items[pickup.item]->pickup_status);
-			camp->setStatus(pickup_status);
+			std::vector<EventComponent>& pickup_status = items->items[pickup.item]->pickup_status_list;
+			for (size_t i = 0; i < pickup_status.size(); ++i) {
+				camp->setStatusEx(&pickup_status[i]);
+			}
 		}
 		pickup.clear();
 	}
@@ -528,20 +533,12 @@ void GameStatePlay::loadTitles() {
 				title.power = powers->verifyID(Parse::toPowerID(infile.val), &infile, !PowerManager::ALLOW_ZERO_ID);
 			}
 			else if (infile.key == "requires_status") {
-				// @ATTR title.requires_status|list(string)|Requires status.
-				std::string repeat_val = Parse::popFirstString(infile.val);
-				while (!repeat_val.empty()) {
-					title.requires_status.push_back(camp->registerStatus(repeat_val));
-					repeat_val = Parse::popFirstString(infile.val);
-				}
+				// @ATTR title.requires_status|list(status)|Requires status.
+				camp->parseStatusList(infile.val, EventComponent::REQUIRES_STATUS, title.requires_status);
 			}
 			else if (infile.key == "requires_not_status") {
-				// @ATTR title.requires_not_status|list(string)|Requires not status.
-				std::string repeat_val = Parse::popFirstString(infile.val);
-				while (!repeat_val.empty()) {
-					title.requires_not_status.push_back(camp->registerStatus(repeat_val));
-					repeat_val = Parse::popFirstString(infile.val);
-				}
+				// @ATTR title.requires_not_status|list(status)|Requires not status.
+				camp->parseStatusList(infile.val, EventComponent::REQUIRES_NOT_STATUS, title.requires_status);
 			}
 			else if (infile.key == "primary_stat") {
 				// @ATTR title.primary_stat|predefined_string, predefined_string : Primary stat, Lesser primary stat|Required primary stat(s). The lesser stat is optional.
@@ -571,21 +568,7 @@ void GameStatePlay::checkTitle() {
 		if (!titles[i].primary_stat_1.empty() && !checkPrimaryStat(titles[i].primary_stat_1, titles[i].primary_stat_2))
 			continue;
 
-		bool status_failed = false;
-		for (size_t j = 0; j < titles[i].requires_status.size(); ++j) {
-			if (!camp->checkStatus(titles[i].requires_status[j])) {
-				status_failed = true;
-				break;
-			}
-		}
-		for (size_t j = 0; j < titles[i].requires_not_status.size(); ++j) {
-			if (camp->checkStatus(titles[i].requires_not_status[j])) {
-				status_failed = true;
-				break;
-			}
-		}
-
-		if (status_failed)
+		if (!camp->checkRequirementsInVector(titles[i].requires_status))
 			continue;
 
 		// Title meets the requirements

@@ -35,7 +35,8 @@ private:
 	class Quest {
 	public:
 		std::string name;
-		StatusID complete_status;
+		std::vector<EventComponent> complete_status;
+		std::map<StatusID, int> status_values;
 	};
 
 	MenuLog *log;

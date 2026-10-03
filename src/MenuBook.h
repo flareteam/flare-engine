@@ -50,8 +50,7 @@ private:
 		Sprite* image;
 		int icon;
 		Point dest;
-		std::vector<StatusID> requires_status;
-		std::vector<StatusID> requires_not_status;
+		std::vector<EventComponent> requires_status;
 
 		BookImage()
 			: image(NULL)
@@ -69,8 +68,7 @@ private:
 		Rect size;
 		int justify;
 		bool shadow;
-		std::vector<StatusID> requires_status;
-		std::vector<StatusID> requires_not_status;
+		std::vector<EventComponent> requires_status;
 
 		BookText()
 			: sprite(NULL)

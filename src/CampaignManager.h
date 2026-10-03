@@ -33,16 +33,46 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 class EventComponent;
 class StatBlock;
 
+class Status {
+public:
+	enum {
+		EXPR_OP_UNKNOWN = 0,
+		EXPR_OP_COMP_EQ,
+		EXPR_OP_COMP_GTEQ,
+		EXPR_OP_COMP_LTEQ,
+		EXPR_OP_COMP_NEQ,
+		EXPR_OP_COMP_GT,
+		EXPR_OP_COMP_LT,
+		EXPR_OP_ASSIGN,
+		EXPR_OP_ADD,
+		EXPR_OP_SUB,
+		EXPR_OP_MUL,
+		EXPR_OP_DIV,
+		EXPR_OP_MOD,
+		EXPR_OP_NONE,
+	};
+
+	bool enabled;
+	bool is_expression;
+	std::string id;
+	int value;
+
+	Status()
+		: enabled(false)
+		, is_expression(false)
+		, id("")
+		, value(0)
+	{}
+};
+
 class CampaignManager {
 public:
-	typedef std::map<StatusID, std::pair<bool, std::string> > StatusMap;
-
 	CampaignManager();
 	~CampaignManager();
 
 	StatusID registerStatus(const std::string& s);
-	void setAll(const std::string& s);
-	std::string getAll();
+	void readAll(const std::string& s);
+	std::string writeAll();
 	bool checkStatus(const StatusID s);
 	void setStatus(const StatusID s);
 	void unsetStatus(const StatusID s);
@@ -65,6 +95,14 @@ public:
 	void randomStatusSet();
 	void randomStatusUnset();
 
+	bool checkStatusEx(const EventComponent *ec);
+	void setStatusEx(const EventComponent *ec);
+	const Status& getStatusByID(const std::string& s);
+	int getStatusValue(StatusID id);
+
+	void parseStatus(const std::string expr_raw, EventComponent *e);
+	void parseStatusList(std::string& s, int type, std::vector<EventComponent>& dest);
+
 	std::queue<ItemStack> drop_stack;
 
 	float bonus_xp;		// Fractional XP points not yet awarded (e.g. killing 1 XP enemies with a +25% ring)
@@ -72,6 +110,8 @@ public:
 	static const bool XP_SHOW_MSG = true;
 
 private:
+	typedef std::map<StatusID, Status> StatusMap;
+
 	StatusMap status;
 
 	std::vector<StatusID> random_status_pool;

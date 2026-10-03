@@ -234,16 +234,12 @@ bool NPC::load(const std::string& npc_id) {
 					vendor = Parse::toBool(infile.val);
 				}
 				else if (infile.key == "vendor_requires_status") {
-					// @ATTR npc.vendor_requires_status|list(string)|The player must have these statuses in order to use this NPC as a vendor.
-					while (infile.val != "") {
-						vendor_requires_status.push_back(camp->registerStatus(Parse::popFirstString(infile.val)));
-					}
+					// @ATTR npc.vendor_requires_status|list(status)|The player must have these statuses in order to use this NPC as a vendor.
+					camp->parseStatusList(infile.val, EventComponent::REQUIRES_STATUS, vendor_requires_status);
 				}
 				else if (infile.key == "vendor_requires_not_status") {
-					// @ATTR npc.vendor_requires_not_status|list(string)|The player must not have these statuses in order to use this NPC as a vendor.
-					while (infile.val != "") {
-						vendor_requires_not_status.push_back(camp->registerStatus(Parse::popFirstString(infile.val)));
-					}
+					// @ATTR npc.vendor_requires_not_status|list(status)|The player must not have these statuses in order to use this NPC as a vendor.
+					camp->parseStatusList(infile.val, EventComponent::REQUIRES_NOT_STATUS, vendor_requires_status);
 				}
 				else if (infile.key == "constant_stock") {
 					// @ATTR npc.constant_stock|repeatable(list(item_id))|A list of items this vendor has for sale. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.
@@ -413,16 +409,12 @@ bool NPC::load(const std::string& npc_id) {
 						vfx->duration = Parse::toDuration(infile.val);
 					}
 					else if (infile.key == "requires_status") {
-						// @ATTR visual_effect.requires_status|repeatable(list(predefined_string))|A list of campaign statuses that are required to be set in order to trigger this visual effect.
-						while (infile.val != "") {
-							vfx->requires_status.push_back(camp->registerStatus(Parse::popFirstString(infile.val)));
-						}
+						// @ATTR visual_effect.requires_status|repeatable(list(status))|A list of campaign statuses that are required to be set in order to trigger this visual effect.
+						camp->parseStatusList(infile.val, EventComponent::REQUIRES_STATUS, vfx->requires_status);
 					}
 					else if (infile.key == "requires_not_status") {
-						// @ATTR visual_effect.requires_not_status|repeatable(list(predefined_string))|A list of campaign statuses that are required to be not set in order to trigger this visual effect.
-						while (infile.val != "") {
-							vfx->requires_not_status.push_back(camp->registerStatus(Parse::popFirstString(infile.val)));
-						}
+						// @ATTR visual_effect.requires_not_status|repeatable(list(status))|A list of campaign statuses that are required to be not set in order to trigger this visual effect.
+						camp->parseStatusList(infile.val, EventComponent::REQUIRES_NOT_STATUS, vfx->requires_status);
 					}
 					else {
 						infile.error("NPC: '%s' is not a valid key.", infile.key.c_str());
@@ -768,15 +760,8 @@ bool NPC::checkVendor() {
 	if (!vendor)
 		return false;
 
-	for (size_t i = 0; i < vendor_requires_status.size(); ++i) {
-		if (!camp->checkStatus(vendor_requires_status[i]))
-			return false;
-	}
-
-	for (size_t i = 0; i < vendor_requires_not_status.size(); ++i) {
-		if (camp->checkStatus(vendor_requires_not_status[i]))
-			return false;
-	}
+	if (!camp->checkRequirementsInVector(vendor_requires_status))
+		return false;
 
 	return true;
 }
@@ -942,25 +927,12 @@ bool NPC::checkVisualEffectStatuses(size_t index) {
 
 	VisualEffect *vfx = &visual_effects[index];
 
-	bool status_good = true;
-	if (!vfx->requires_status.empty() || !vfx->requires_not_status.empty()) {
-		for (size_t j = 0; j < vfx->requires_status.size(); ++j) {
-			if (!camp->checkStatus(vfx->requires_status[j])) {
-				status_good = false;
-				break;
-			}
-		}
-		if (status_good) {
-			for (size_t j = 0; j < vfx->requires_not_status.size(); ++j) {
-				if (camp->checkStatus(vfx->requires_not_status[j])) {
-					status_good = false;
-					break;
-				}
-			}
-		}
+	if (!vfx->requires_status.empty()) {
+		if (!camp->checkRequirementsInVector(vfx->requires_status))
+			return false;
 	}
 
-	return status_good;
+	return true;
 }
 
 NPC::~NPC() {

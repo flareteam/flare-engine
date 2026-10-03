@@ -39,6 +39,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "StatBlock.h"
 #include "UtilsMath.h"
 #include "UtilsParsing.h"
+#include <sstream>
 
 CampaignManager::CampaignManager()
 	: bonus_xp(0.0)
@@ -50,6 +51,8 @@ StatusID CampaignManager::registerStatus(const std::string& s) {
 		return 0;
 
 	StatusID new_id = Utils::hashString(s);
+	if (new_id == 0)
+		return 0;
 
 	// check if this status was already registered
 	StatusMap::iterator it;
@@ -58,81 +61,104 @@ StatusID CampaignManager::registerStatus(const std::string& s) {
 		return it->first;
 
 	// register a new status
-	status[new_id].first = false;
-	status[new_id].second = s;
+	status[new_id].enabled = false;
+	status[new_id].id = s;
+	status[new_id].value = 0;
 	return new_id;
 }
 
 /**
  * Take the savefile campaign= and convert to status array
  */
-void CampaignManager::setAll(const std::string& s) {
+void CampaignManager::readAll(const std::string& s) {
 	std::string str = s + ',';
 	std::string token;
 	while (!str.empty()) {
 		token = Parse::popFirstString(str);
-		if (!token.empty())
-			setStatus(registerStatus(token));
+		if (!token.empty()) {
+			if (token[0] == '(') {
+				EventComponent ec;
+				parseStatus(token, &ec);
+				setStatusEx(&ec);
+			}
+			else {
+				setStatus(registerStatus(token));
+			}
+		}
 	}
 }
 
 /**
  * Convert status array to savefile campaign= (status csv)
  */
-std::string CampaignManager::getAll() {
-	std::string output("");
+std::string CampaignManager::writeAll() {
+	std::stringstream ss;
 
 	StatusMap::iterator it;
 	for (it = status.begin(); it != status.end(); ++it) {
-		if (it->second.first)
-			output += it->second.second;
+		if (it->second.enabled) {
+			if (!ss.str().empty())
+				ss << ',';
 
-		StatusMap::iterator temp = it;
-		++temp;
-		if (temp != status.end() && temp->second.first) {
-			output += ',';
+			if (it->second.is_expression)
+				ss << '(' << it->second.id << '=' << it->second.value << ')';
+			else
+				ss << it->second.id;
 		}
 	}
-	return output;
+
+	return ss.str();
 }
 
 bool CampaignManager::checkStatus(const StatusID s) {
+	if (s == 0)
+		return false;
+
 	StatusMap::iterator it;
 	it = status.find(s);
-	if (it != status.end() && it->second.first)
+	if (it != status.end() && it->second.enabled)
 		return true;
 
 	return false;
 }
 
 void CampaignManager::setStatus(const StatusID s) {
+	if (s == 0)
+		return;
+
 	// if it's already set, don't set it again
 	if (checkStatus(s)) return;
 
-	status[s].first = true;
+	status[s].enabled = true;
+	status[s].value = 0;
 	pc->stats.check_title = true;
 }
 
 void CampaignManager::unsetStatus(const StatusID s) {
+	if (s == 0)
+		return;
+
 	// if it's already unset, don't unset it again
 	if (!checkStatus(s)) return;
 
-	status[s].first = false;
+	status[s].enabled = false;
+	status[s].value = 0;
 	pc->stats.check_title = true;
 }
 
 void CampaignManager::resetAllStatuses() {
 	StatusMap::iterator it;
 	for (it = status.begin(); it != status.end(); ++it) {
-		it->second.first = false;
+		it->second.enabled = false;
+		it->second.value = 0;
 	}
 }
 
 void CampaignManager::getSetStatusStrings(std::vector<std::string>& status_strings) {
 	StatusMap::iterator it;
 	for (it = status.begin(); it != status.end(); ++it) {
-		if (it->second.first)
-			status_strings.push_back(it->second.second);
+		if (it->second.enabled)
+			status_strings.push_back(it->second.id);
 	}
 }
 
@@ -268,11 +294,11 @@ void CampaignManager::restoreHPMP(const std::string& s) {
 
 bool CampaignManager::checkAllRequirements(const EventComponent& ec) {
 	if (ec.type == EventComponent::REQUIRES_STATUS) {
-		if (checkStatus(ec.status))
+		if (checkStatusEx(&ec))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_NOT_STATUS) {
-		if (!checkStatus(ec.status))
+		if (!checkStatusEx(&ec))
 			return true;
 	}
 	else if (ec.type == EventComponent::REQUIRES_CURRENCY) {
@@ -371,6 +397,190 @@ void CampaignManager::randomStatusUnset() {
 		return;
 
 	unsetStatus(random_status);
+}
+
+bool CampaignManager::checkStatusEx(const EventComponent *ec) {
+	StatusID id = ec->status;
+
+	StatusMap::iterator it;
+	it = status.find(id);
+	if (it == status.end() || it->second.enabled == false)
+		return false;
+
+	int op = ec->data[0].Int;
+	int rvalue = ec->data[1].Int;
+
+	if (op == Status::EXPR_OP_COMP_EQ)
+		return it->second.value == rvalue;
+	else if (op == Status::EXPR_OP_COMP_GTEQ)
+		return it->second.value >= rvalue;
+	else if (op == Status::EXPR_OP_COMP_LTEQ)
+		return it->second.value <= rvalue;
+	else if (op == Status::EXPR_OP_COMP_NEQ)
+		return it->second.value != rvalue;
+	else if (op == Status::EXPR_OP_COMP_GT)
+		return it->second.value > rvalue;
+	else if (op == Status::EXPR_OP_COMP_LT)
+		return it->second.value < rvalue;
+	else if (op == Status::EXPR_OP_NONE)
+		return it->second.enabled;
+
+	return false;
+}
+
+void CampaignManager::setStatusEx(const EventComponent *ec) {
+	StatusID id = ec->status;
+
+	status[id].enabled = true;
+	status[id].is_expression = ec->data[2].Bool;
+
+	int op = ec->data[0].Int;
+	int rvalue = ec->data[1].Int;
+
+	if (op == Status::EXPR_OP_ASSIGN)
+		status[id].value = rvalue;
+	else if (op == Status::EXPR_OP_ADD)
+		status[id].value += rvalue;
+	else if (op == Status::EXPR_OP_SUB)
+		status[id].value -= rvalue;
+	else if (op == Status::EXPR_OP_MUL)
+		status[id].value *= rvalue;
+	else if (op == Status::EXPR_OP_DIV && rvalue != 0)
+		status[id].value /= rvalue;
+	else if (op == Status::EXPR_OP_MOD && rvalue != 0)
+		status[id].value %= rvalue;
+	else if (op == Status::EXPR_OP_NONE)
+		status[id].value = 0;
+
+	pc->stats.check_title = true;
+}
+
+void CampaignManager::parseStatus(const std::string expr_raw, EventComponent *e) {
+	if (!e)
+		return;
+
+	std::string expr = Parse::trim(expr_raw);
+
+	if (expr.size() < 2 || (expr.size() >= 2 && (expr[0] != '(' || expr[expr.size()-1] != ')'))) {
+		// not a variable expression, so treat this as a traditional boolean status
+		e->s = expr;
+		e->status = registerStatus(e->s);
+		e->data[0].Int = Status::EXPR_OP_NONE;
+		e->data[1].Int = 0;
+		e->data[2].Bool = false; // flag to say this is not an expression
+		return;
+	}
+
+	int op = Status::EXPR_OP_UNKNOWN;
+	std::string lvalue;
+	std::string rvalue;
+	bool rvalue_is_var = false;
+
+	for (size_t i = 1; i < expr.size()-1; ++i) {
+		if (op == Status::EXPR_OP_UNKNOWN) {
+			// look for operator, otherwise treat as lvalue
+			if (expr[i] == '=' && expr[i+1] == '=') {
+				op = Status::EXPR_OP_COMP_EQ;
+				i++;
+			}
+			else if (expr[i] == '>' && expr[i+1] == '=') {
+				op = Status::EXPR_OP_COMP_GTEQ;
+				i++;
+			}
+			else if (expr[i] == '<' && expr[i+1] == '=') {
+				op = Status::EXPR_OP_COMP_LTEQ;
+				i++;
+			}
+			else if (expr[i] == '!' && expr[i+1] == '=') {
+				op = Status::EXPR_OP_COMP_NEQ;
+				i++;
+			}
+			else if (expr[i] == '>') {
+				op = Status::EXPR_OP_COMP_GT;
+			}
+			else if (expr[i] == '<') {
+				op = Status::EXPR_OP_COMP_LT;
+			}
+			else if (expr[i] == '=') {
+				op = Status::EXPR_OP_ASSIGN;
+			}
+			else if (expr[i] == '+') {
+				op = Status::EXPR_OP_ADD;
+			}
+			else if (expr[i] == '-') {
+				op = Status::EXPR_OP_SUB;
+			}
+			else if (expr[i] == '*') {
+				op = Status::EXPR_OP_MUL;
+			}
+			else if (expr[i] == '/') {
+				op = Status::EXPR_OP_DIV;
+			}
+			else if (expr[i] == '%') {
+				op = Status::EXPR_OP_MOD;
+			}
+			else {
+				lvalue += expr[i];
+			}
+		}
+		else {
+			// process rvalue
+			if (expr[i] < '0' || expr[i] > '9') {
+				rvalue_is_var = true;
+			}
+			rvalue += expr[i];
+		}
+	}
+
+	if (op == Status::EXPR_OP_UNKNOWN && rvalue.empty()) {
+		// no operator detected. setVar() will set its value as 0, and checkVar() will test if the variable is enabled regardless of its value
+		op = Status::EXPR_OP_NONE;
+	}
+
+	e->s = Parse::trim(lvalue);
+	e->status = registerStatus(e->s);
+
+	e->data[0].Int = op;
+
+	if (rvalue_is_var) {
+		// TODO register rvalue var
+		Utils::logError("CampaignManager: Variable expressions do not support non-integer rvalues.");
+		e->data[1].Int = 0;
+	}
+	else {
+		e->data[1].Int = Parse::toInt(Parse::trim(rvalue));
+	}
+
+	// flag to say that this is an expression
+	e->data[2].Bool = true;
+}
+
+const Status& CampaignManager::getStatusByID(const std::string& s) {
+	StatusID id = registerStatus(s);
+	return status[id];
+}
+
+int CampaignManager::getStatusValue(StatusID id) {
+	if (!status[id].is_expression && status[id].enabled)
+		return 1;
+
+	return status[id].value;
+}
+
+void CampaignManager::parseStatusList(std::string& s, int type, std::vector<EventComponent>& dest) {
+	EventComponent ec;
+	ec.type = type;
+	parseStatus(Parse::popFirstString(s), &ec);
+	dest.push_back(ec);
+
+	std::string repeat_val = Parse::popFirstString(s);
+	while (!repeat_val.empty()) {
+		EventComponent ec_repeat;
+		ec_repeat.type = type;
+		parseStatus(repeat_val, &ec_repeat);
+		dest.push_back(ec_repeat);
+		repeat_val = Parse::popFirstString(s);
+	}
 }
 
 CampaignManager::~CampaignManager() {

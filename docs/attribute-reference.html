@@ -92,6 +92,23 @@ code {
 <p><code>stat_id</code>, a string that can be any of the following: A base stat (e.g. <code>hp</code> or <code>avoidance</code>); A min or max damage type from <code>engine/damage_types.txt</code> (e.g. <code>dmg_melee_min</code> or <code>dmg_ment_max</code>); An elemental resistance from <code>engine/elements.txt</code>. To use an element as a resistance, <code>_resist</code> is appened to the element id (e.g. <code>fire_resist</code>)</p>
 
 <p><code>level_scaled_value</code>, a string representing a key/value pair that is delimited by a colon (':'). The first half represents the scaling method, and can be one of the following values: <code>base</code>, <code>player_level</code>, <code>item_level</code>, or a primary stat ID. The second half is the value, which is a float. For convenience, it is possible to specify only the value part to define the 'base' value (e.g. <code>price=10</code> is the same as <code>price=base:10</code>). Level scaling assumes level 1 is included in the base. So a level 5 item with <code>price=item_level:1</code> would equate to 4, not 5. Additionally, the result can be rounded and/or clamped. To round, use <code>round:true</code>. To set the minimum to, for example, 0, use <code>min:0</code>. Likewise, <code>max:1</code> would set the maximum to 1.</p>
+
+<p><code>status</code>, a string expression for setting and checking campaign statuses. The simplest form is a plain identifier with no parentheses, which is treated as a boolean flag. The other form is an expression that uses the following rules:</p>
+
+<p>Format: <code>(&lt;id&gt;&lt;operator&gt;&lt;integer&gt;)</code></p>
+
+<p>Operators (for setting status): <code>= + - * / %</code></p>
+
+<p>Operators (for checking status): <code>== &lt; &gt; &lt;= &gt;= !=</code></p>
+
+<p>Examples:</p>
+
+<ul>
+<li><code>set_status=my_boolean</code></li>
+<li><code>set_status=(golbins_killed+1)</code></li>
+<li><code>requires_status=(goblins_killed&gt;0)</code></li>
+</ul>
+
 <hr />
 
 <h4>AnimationSet</h4>
@@ -254,6 +271,8 @@ code {
 
 <p><strong>raycast_resolution</strong> | <code>float</code> | Determines the number of steps used when testing line-of-sight and line-of-movement. A smaller value equates to more accurate results at the cost of performance. Defaults to 0.1.</p>
 
+<p><strong>min_fps</strong> | <code>int</code> | Sets the minimum frame limit that can be selected in the Video options. It will not change the player's saved max_fps setting if it is lower. If set to 0, this property will be ignored.</p>
+
 <hr />
 
 <h4>EngineSettings: Resolution</h4>
@@ -354,7 +373,7 @@ code {
 
 <p><strong>powers</strong> | <code>list(power_id)</code> | A list of powers that are unlocked when starting this class.</p>
 
-<p><strong>campaign</strong> | <code>list(string)</code> | A list of campaign statuses that are set when starting this class.</p>
+<p><strong>campaign</strong> | <code>list(status)</code> | A list of campaign statuses that are set when starting this class.</p>
 
 <p><strong>power_tree</strong> | <code>string</code> | Power tree that will be loaded by MenuPowers</p>
 
@@ -932,9 +951,9 @@ code {
 
 <p><strong>title.power</strong> | <code>power_id</code> | Requires power.</p>
 
-<p><strong>title.requires_status</strong> | <code>list(string)</code> | Requires status.</p>
+<p><strong>title.requires_status</strong> | <code>list(status)</code> | Requires status.</p>
 
-<p><strong>title.requires_not_status</strong> | <code>list(string)</code> | Requires not status.</p>
+<p><strong>title.requires_not_status</strong> | <code>list(status)</code> | Requires not status.</p>
 
 <p><strong>title.primary_stat</strong> | <code>predefined_string, predefined_string : Primary stat, Lesser primary stat</code> | Required primary stat(s). The lesser stat is optional.</p>
 
@@ -1148,7 +1167,7 @@ code {
 
 <p><strong>max_quantity</strong> | <code>int</code> | Max item count per stack.</p>
 
-<p><strong>pickup_status</strong> | <code>string</code> | Set a campaign status when item is picked up, this is used for quest items.</p>
+<p><strong>pickup_status</strong> | <code>list(status)</code> | Set campaign statuses when item is picked up. Typically used for quest items.</p>
 
 <p><strong>stepfx</strong> | <code>predefined_string</code> | Sound effect when walking, this applies only to armors.</p>
 
@@ -1252,7 +1271,7 @@ code {
 
 <p><strong>loot.quantity</strong> | <code>int, int : Min quantity, Max quantity (optional)</code> | The quantity of item in the dropped loot stack.</p>
 
-<p><strong>loot.requires_status</strong> | <code>string</code> | A single campaign status that is required for the item to be able to drop.</p>
+<p><strong>loot.requires_status</strong> | <code>string</code> | A single campaign status that is required for the item to be able to drop. Status IDs only; status expressions are not supported here.</p>
 
 <p><strong>loot.requires_level</strong> | <code>int, int : Min player level, Max player level</code> | The player's level must be in this range for the item to drop.</p>
 
@@ -1290,9 +1309,9 @@ code {
 
 <p><strong>procgen_type</strong> | <code>["links", "normal", "start", "end", "key", "door_north_south", "door_west_east"]</code> | Defines the type of chunk this map is when used in procedural map generation.</p>
 
-<p><strong>procgen_unique_status</strong> | <code>string</code> | Sets this campaign status once this map is placed as a chunk during procedural generation. Once the status is set, the chunk will no longer be eligible to be placed.</p>
+<p><strong>procgen_unique_status</strong> | <code>status</code> | Sets this campaign status once this map is placed as a chunk during procedural generation. Once the status is set, the chunk will no longer be eligible to be placed.</p>
 
-<p><strong>procgen_reset_status</strong> | <code>string</code> | If the map contains a procgen region, it will be regenerated if this campaign status is set.</p>
+<p><strong>procgen_reset_status</strong> | <code>status</code> | If the map contains a procgen region, it will be regenerated if this campaign status is set.</p>
 
 <p><strong>layer.type</strong> | <code>string</code> | Map layer type.</p>
 
@@ -1466,9 +1485,9 @@ code {
 
 <p><strong>image.image_icon</strong> | <code>icon_id</code> | Use an icon as the image instead of a file.</p>
 
-<p><strong>image.requires_status</strong> | <code>list(string)</code> | Image requires these campaign statuses in order to be visible.</p>
+<p><strong>image.requires_status</strong> | <code>list(status)</code> | Image requires these campaign statuses in order to be visible.</p>
 
-<p><strong>image.requires_not_status</strong> | <code>list(string)</code> | Image must not have any of these campaign statuses in order to be visible.</p>
+<p><strong>image.requires_not_status</strong> | <code>list(status)</code> | Image must not have any of these campaign statuses in order to be visible.</p>
 
 <p><strong>text.text_pos</strong> | <code>int, int, int, ["left", "center", "right"] : X, Y, Width, Text justify</code> | Position of the text.</p>
 
@@ -1478,9 +1497,9 @@ code {
 
 <p><strong>text.text</strong> | <code>string</code> | The text to be displayed.</p>
 
-<p><strong>text.requires_status</strong> | <code>list(string)</code> | Text requires these campaign statuses in order to be visible.</p>
+<p><strong>text.requires_status</strong> | <code>list(status)</code> | Text requires these campaign statuses in order to be visible.</p>
 
-<p><strong>text.requires_not_status</strong> | <code>list(string)</code> | Text must not have any of these campaign statuses in order to be visible.</p>
+<p><strong>text.requires_not_status</strong> | <code>list(status)</code> | Text must not have any of these campaign statuses in order to be visible.</p>
 
 <p><strong>button.button_pos</strong> | <code>point</code> | Position of the button.</p>
 
@@ -1808,13 +1827,13 @@ code {
 
 <p><strong>power.requires_power</strong> | <code>power_id</code> | Power requires another power id.</p>
 
-<p><strong>power.requires_status</strong> | <code>repeatable(string)</code> | Power requires this campaign status.</p>
+<p><strong>power.requires_status</strong> | <code>repeatable(status)</code> | Power requires this campaign status.</p>
 
-<p><strong>power.requires_not_status</strong> | <code>repeatable(string)</code> | Power requires not having this campaign status.</p>
+<p><strong>power.requires_not_status</strong> | <code>repeatable(status)</code> | Power requires not having this campaign status.</p>
 
-<p><strong>power.visible_requires_status</strong> | <code>repeatable(string)</code> | (Deprecated as of v1.11.75) Hide the power if we don't have this campaign status.</p>
+<p><strong>power.visible_requires_status</strong> | <code>repeatable(status)</code> | (Deprecated as of v1.11.75) Hide the power if we don't have this campaign status.</p>
 
-<p><strong>power.visible_requires_not_status</strong> | <code>repeatable(string)</code> | (Deprecated as of v1.11.75) Hide the power if we have this campaign status.</p>
+<p><strong>power.visible_requires_not_status</strong> | <code>repeatable(status)</code> | (Deprecated as of v1.11.75) Hide the power if we have this campaign status.</p>
 
 <p><strong>power.upgrades</strong> | <code>list(power_id)</code> | A list of upgrade power ids that this power slot can upgrade to. Each of these powers should have a matching upgrade section.</p>
 
@@ -1834,13 +1853,13 @@ code {
 
 <p><strong>upgrade.requires_power</strong> | <code>int</code> | Upgrade requires another power id.</p>
 
-<p><strong>upgrade.requires_status</strong> | <code>repeatable(string)</code> | Upgrade requires this campaign status.</p>
+<p><strong>upgrade.requires_status</strong> | <code>repeatable(status)</code> | Upgrade requires this campaign status.</p>
 
-<p><strong>upgrade.requires_not_status</strong> | <code>repeatable(string)</code> | Upgrade requires not having this campaign status.</p>
+<p><strong>upgrade.requires_not_status</strong> | <code>repeatable(status)</code> | Upgrade requires not having this campaign status.</p>
 
-<p><strong>upgrade.visible_requires_status</strong> | <code>repeatable(string)</code> | (Deprecated as of v1.11.75) Hide the upgrade if we don't have this campaign status.</p>
+<p><strong>upgrade.visible_requires_status</strong> | <code>repeatable(status)</code> | (Deprecated as of v1.11.75) Hide the upgrade if we don't have this campaign status.</p>
 
-<p><strong>upgrade.visible_requires_not_status</strong> | <code>repeatable(string)</code> | (Deprecated as of v1.11.75) Hide the upgrade if we have this campaign status.</p>
+<p><strong>upgrade.visible_requires_not_status</strong> | <code>repeatable(status)</code> | (Deprecated as of v1.11.75) Hide the upgrade if we have this campaign status.</p>
 
 <p><strong>upgrade.visible</strong> | <code>bool</code> | Controls whether or not a power is visible or hidden regardless of unlocked state. Defaults to true.</p>
 
@@ -2040,9 +2059,9 @@ code {
 
 <p><strong>npc.vendor</strong> | <code>bool</code> | Allows this NPC to buy/sell items.</p>
 
-<p><strong>npc.vendor_requires_status</strong> | <code>list(string)</code> | The player must have these statuses in order to use this NPC as a vendor.</p>
+<p><strong>npc.vendor_requires_status</strong> | <code>list(status)</code> | The player must have these statuses in order to use this NPC as a vendor.</p>
 
-<p><strong>npc.vendor_requires_not_status</strong> | <code>list(string)</code> | The player must not have these statuses in order to use this NPC as a vendor.</p>
+<p><strong>npc.vendor_requires_not_status</strong> | <code>list(status)</code> | The player must not have these statuses in order to use this NPC as a vendor.</p>
 
 <p><strong>npc.constant_stock</strong> | <code>repeatable(list(item_id))</code> | A list of items this vendor has for sale. Quantity can be specified by appending ":Q" to the item_id, where Q is an integer.</p>
 
@@ -2084,9 +2103,9 @@ code {
 
 <p><strong>visual_effect.duration</strong> | <code>duration</code> | Sets how long the visual effect will last.</p>
 
-<p><strong>visual_effect.requires_status</strong> | <code>repeatable(list(predefined_string))</code> | A list of campaign statuses that are required to be set in order to trigger this visual effect.</p>
+<p><strong>visual_effect.requires_status</strong> | <code>repeatable(list(status))</code> | A list of campaign statuses that are required to be set in order to trigger this visual effect.</p>
 
-<p><strong>visual_effect.requires_not_status</strong> | <code>repeatable(list(predefined_string))</code> | A list of campaign statuses that are required to be not set in order to trigger this visual effect.</p>
+<p><strong>visual_effect.requires_not_status</strong> | <code>repeatable(list(status))</code> | A list of campaign statuses that are required to be not set in order to trigger this visual effect.</p>
 
 <hr />
 
@@ -2358,7 +2377,7 @@ code {
 
 <p><strong>name</strong> | <code>string</code> | A displayed name for this quest.</p>
 
-<p><strong>complete_status</strong> | <code>string</code> | If this status is set, the quest will be displayed as completed.</p>
+<p><strong>complete_status</strong> | <code>list(status)</code> | If this status is set, the quest will be displayed as completed.</p>
 
 <p><strong>quest.requires_status</strong> | <code>list(string)</code> | Quest requires this campaign status</p>
 
@@ -2381,6 +2400,8 @@ code {
 <p><strong>quest.requires_not_class</strong> | <code>predefined_string</code> | Quest requires not this base class</p>
 
 <p><strong>quest.quest_text</strong> | <code>string</code> | Text that gets displayed in the Quest log when this quest is active.</p>
+
+<p><strong>quest.show_status</strong> | <code>string</code> | Displays the value of the given status ID after the quest text.</p>
 
 <hr />
 
@@ -2476,13 +2497,13 @@ code {
 
 <p><strong>loot_count</strong> | <code>int, int : Min, Max</code> | Sets the minimum (and optionally, the maximum) amount of loot this creature can drop. Overrides the global drop_max setting.</p>
 
-<p><strong>defeat_status</strong> | <code>string</code> | Campaign status to set upon death.</p>
+<p><strong>defeat_status</strong> | <code>status</code> | Campaign status to set upon death.</p>
 
-<p><strong>convert_status</strong> | <code>string</code> | Campaign status to set upon being converted to a player ally.</p>
+<p><strong>convert_status</strong> | <code>status</code> | Campaign status to set upon being converted to a player ally.</p>
 
 <p><strong>first_defeat_loot</strong> | <code>item_id</code> | Drops this item upon first death (requires defeat_status to be set).</p>
 
-<p><strong>quest_loot</strong> | <code>string, string, item_id : Required status, Required not status, Item</code> | Drops this item when campaign status is met. Can't drop at the same time as first_defeat_loot.</p>
+<p><strong>quest_loot</strong> | <code>status, status, item_id : Required status, Required not status, Item</code> | Drops this item when campaign status is met. Can't drop at the same time as first_defeat_loot.</p>
 
 <p><strong>flying</strong> | <code>bool</code> | Creature can move over gaps/water.</p>
 

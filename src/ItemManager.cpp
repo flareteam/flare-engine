@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "CampaignManager.h"
 #include "CommonIncludes.h"
 #include "EngineSettings.h"
+#include "EventManager.h"
 #include "FileParser.h"
 #include "FontEngine.h"
 #include "InputState.h"
@@ -692,7 +693,7 @@ void ItemManager::loadItems(const std::string& filename) {
 			// @ATTR max_quantity|int|Max item count per stack.
 			item->max_quantity = Parse::toInt(infile.val);
 		else if (infile.key == "pickup_status")
-			// @ATTR pickup_status|string|Set a campaign status when item is picked up, this is used for quest items.
+			// @ATTR pickup_status|list(status)|Set campaign statuses when item is picked up. Typically used for quest items.
 			item->pickup_status = infile.val;
 		else if (infile.key == "stepfx")
 			// @ATTR stepfx|predefined_string|Sound effect when walking, this applies only to armors.
@@ -2270,6 +2271,19 @@ bool ItemManager::compareItemStack(const ItemStack &stack1, const ItemStack &sta
 		return stack1.quantity < stack2.quantity;
 	else
 		return stack1.item < stack2.item;
+}
+
+void ItemManager::parsePickupStatuses() {
+	for (size_t i = 0; i < items.size(); ++i) {
+		Item *item = items[i];
+
+		if (!item || item->pickup_status.empty())
+			continue;
+
+		std::string pickup_status = item->pickup_status;
+		item->pickup_status_list.clear();
+		camp->parseStatusList(pickup_status, EventComponent::SET_STATUS, item->pickup_status_list);
+	}
 }
 
 // Bonus documentation

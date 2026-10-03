@@ -725,7 +725,7 @@ void EngineSettings::HeroClasses::load() {
 				}
 			}
 			else if (infile.key == "campaign") {
-				// @ATTR campaign|list(string)|A list of campaign statuses that are set when starting this class.
+				// @ATTR campaign|list(status)|A list of campaign statuses that are set when starting this class.
 				current->statuses.clear();
 
 				std::string status;

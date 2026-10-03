@@ -199,7 +199,7 @@ void SaveLoad::saveGame() {
 		}
 
 		// campaign data
-		outfile << "campaign=" << camp->getAll() << "\n";
+		outfile << "campaign=" << camp->writeAll() << "\n";
 
 		outfile << "time_played=" << pc->time_played << "\n";
 
@@ -507,7 +507,7 @@ void SaveLoad::loadGame() {
 						pc->stats.powers_list.push_back(power_id);
 				}
 			}
-			else if (infile.key == "campaign") camp->setAll(infile.val);
+			else if (infile.key == "campaign") camp->readAll(infile.val);
 			else if (infile.key == "time_played") pc->time_played = Parse::toUnsignedLong(infile.val);
 			else if (infile.key == "engine_version") save_version.setFromString(infile.val);
 			else if (eset->misc.save_buyback && infile.key == "buyback_item") {
@@ -659,8 +659,10 @@ void SaveLoad::loadClass(int index) {
 
 	// campaign statuses
 	for (size_t i = 0; i < hero_class.statuses.size(); ++i) {
-		StatusID class_status = camp->registerStatus(hero_class.statuses[i]);
-		camp->setStatus(class_status);
+		EventComponent ec;
+		std::string class_status = hero_class.statuses[i];
+		camp->parseStatus(class_status, &ec);
+		camp->setStatusEx(&ec);
 	}
 
 	// apply stats, inventory, and powers

@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define MENU_POWERS_H
 
 #include "CommonIncludes.h"
+#include "EventManager.h"
 #include "Menu.h"
 #include "Utils.h"
 
@@ -61,8 +62,7 @@ public:
 	int requires_level;
 	std::vector<int> requires_primary;
 	std::vector<PowerID> requires_power;
-	std::vector<StatusID> requires_status;
-	std::vector<StatusID> requires_not_status;
+	std::vector<EventComponent> requires_status;
 
 	bool visible;
 	bool visible_check_locked;

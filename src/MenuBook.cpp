@@ -230,21 +230,13 @@ void MenuBook::loadImage(FileParser &infile, BookImage& bimage) {
 
 		bimage.icon = Parse::toInt(infile.val);
 	}
-	// @ATTR image.requires_status|list(string)|Image requires these campaign statuses in order to be visible.
+	// @ATTR image.requires_status|list(status)|Image requires these campaign statuses in order to be visible.
 	else if (infile.key == "requires_status") {
-		std::string temp = Parse::popFirstString(infile.val);
-		while (!temp.empty()) {
-			bimage.requires_status.push_back(camp->registerStatus(temp));
-			temp = Parse::popFirstString(infile.val);
-		}
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_STATUS, bimage.requires_status);
 	}
-	// @ATTR image.requires_not_status|list(string)|Image must not have any of these campaign statuses in order to be visible.
+	// @ATTR image.requires_not_status|list(status)|Image must not have any of these campaign statuses in order to be visible.
 	else if (infile.key == "requires_not_status") {
-		std::string temp = Parse::popFirstString(infile.val);
-		while (!temp.empty()) {
-			bimage.requires_not_status.push_back(camp->registerStatus(temp));
-			temp = Parse::popFirstString(infile.val);
-		}
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_NOT_STATUS, bimage.requires_status);
 	}
 	else {
 		infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
@@ -279,21 +271,13 @@ void MenuBook::loadText(FileParser &infile, BookText& btext) {
 		// we use substr here to remove the trailing comma that was added in loadBook()
 		btext.text_raw = infile.val.substr(0, infile.val.length() - 1);
 	}
-	// @ATTR text.requires_status|list(string)|Text requires these campaign statuses in order to be visible.
+	// @ATTR text.requires_status|list(status)|Text requires these campaign statuses in order to be visible.
 	else if (infile.key == "requires_status") {
-		std::string temp = Parse::popFirstString(infile.val);
-		while (!temp.empty()) {
-			btext.requires_status.push_back(camp->registerStatus(temp));
-			temp = Parse::popFirstString(infile.val);
-		}
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_STATUS, btext.requires_status);
 	}
-	// @ATTR text.requires_not_status|list(string)|Text must not have any of these campaign statuses in order to be visible.
+	// @ATTR text.requires_not_status|list(status)|Text must not have any of these campaign statuses in order to be visible.
 	else if (infile.key == "requires_not_status") {
-		std::string temp = Parse::popFirstString(infile.val);
-		while (!temp.empty()) {
-			btext.requires_not_status.push_back(camp->registerStatus(temp));
-			temp = Parse::popFirstString(infile.val);
-		}
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_NOT_STATUS, btext.requires_status);
 	}
 	else {
 		infile.error("MenuBook: '%s' is not a valid key.", infile.key.c_str());
@@ -504,37 +488,13 @@ void MenuBook::render() {
 
 	closeButton->render();
 	for (unsigned i=0; i<text.size(); i++) {
-		bool skip = false;
-
-		for (size_t j = 0; j < text[i].requires_status.size(); ++j) {
-			if (!camp->checkStatus(text[i].requires_status[j]))
-				skip = true;
-		}
-
-		for (size_t j = 0; j < text[i].requires_not_status.size(); ++j) {
-			if (camp->checkStatus(text[i].requires_not_status[j]))
-				skip = true;
-		}
-
-		if (skip)
+		if (!camp->checkRequirementsInVector(text[i].requires_status))
 			continue;
 
 		render_device->render(text[i].sprite);
 	}
 	for (size_t i = 0; i < images.size(); ++i) {
-		bool skip = false;
-
-		for (size_t j = 0; j < images[i].requires_status.size(); ++j) {
-			if (!camp->checkStatus(images[i].requires_status[j]))
-				skip = true;
-		}
-
-		for (size_t j = 0; j < images[i].requires_not_status.size(); ++j) {
-			if (camp->checkStatus(images[i].requires_not_status[j]))
-				skip = true;
-		}
-
-		if (skip)
+		if (!camp->checkRequirementsInVector(images[i].requires_status))
 			continue;
 
 		if (images[i].image) {

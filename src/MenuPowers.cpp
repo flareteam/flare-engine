@@ -60,7 +60,6 @@ MenuPowersCell::MenuPowersCell()
 	, requires_primary(eset->primary_stats.list.size(), 0)
 	, requires_power()
 	, requires_status()
-	, requires_not_status()
 	, visible(true)
 	, visible_check_locked(false)
 	, visible_check_status(false)
@@ -459,23 +458,23 @@ void MenuPowers::loadPower(FileParser &infile) {
 			cell_group.cells[0].requires_power.push_back(power_id);
 	}
 	else if (infile.key == "requires_status") {
-		// @ATTR power.requires_status|repeatable(string)|Power requires this campaign status.
-		cell_group.cells[0].requires_status.push_back(camp->registerStatus(infile.val));
+		// @ATTR power.requires_status|repeatable(status)|Power requires this campaign status.
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_STATUS, cell_group.cells[0].requires_status);
 	}
 	else if (infile.key == "requires_not_status") {
-		// @ATTR power.requires_not_status|repeatable(string)|Power requires not having this campaign status.
-		cell_group.cells[0].requires_not_status.push_back(camp->registerStatus(infile.val));
+		// @ATTR power.requires_not_status|repeatable(status)|Power requires not having this campaign status.
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_NOT_STATUS, cell_group.cells[0].requires_status);
 	}
 	else if (infile.key == "visible_requires_status") {
-		// @ATTR power.visible_requires_status|repeatable(string)|(Deprecated as of v1.11.75) Hide the power if we don't have this campaign status.
+		// @ATTR power.visible_requires_status|repeatable(status)|(Deprecated as of v1.11.75) Hide the power if we don't have this campaign status.
 		infile.error("MenuPowers: visible_requires_status is deprecated. Use requires_status and visible_check_status=true instead.");
-		cell_group.cells[0].requires_status.push_back(camp->registerStatus(infile.val));
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_STATUS, cell_group.cells[0].requires_status);
 		cell_group.cells[0].visible_check_status = true;
 	}
 	else if (infile.key == "visible_requires_not_status") {
-		// @ATTR power.visible_requires_not_status|repeatable(string)|(Deprecated as of v1.11.75) Hide the power if we have this campaign status.
+		// @ATTR power.visible_requires_not_status|repeatable(status)|(Deprecated as of v1.11.75) Hide the power if we have this campaign status.
 		infile.error("MenuPowers: visible_requires_not_status is deprecated. Use requires_not_status and visible_check_status=true instead.");
-		cell_group.cells[0].requires_not_status.push_back(camp->registerStatus(infile.val));
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_NOT_STATUS, cell_group.cells[0].requires_status);
 		cell_group.cells[0].visible_check_status = true;
 	}
 	else if (infile.key == "upgrades") {
@@ -571,23 +570,23 @@ void MenuPowers::loadUpgrade(FileParser &infile, std::vector<MenuPowersCell>& po
 			cell.requires_power.push_back(power_id);
 	}
 	else if (infile.key == "requires_status") {
-		// @ATTR upgrade.requires_status|repeatable(string)|Upgrade requires this campaign status.
-		cell.requires_status.push_back(camp->registerStatus(infile.val));
+		// @ATTR upgrade.requires_status|repeatable(status)|Upgrade requires this campaign status.
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_STATUS, cell.requires_status);
 	}
 	else if (infile.key == "requires_not_status") {
-		// @ATTR upgrade.requires_not_status|repeatable(string)|Upgrade requires not having this campaign status.
-		cell.requires_not_status.push_back(camp->registerStatus(infile.val));
+		// @ATTR upgrade.requires_not_status|repeatable(status)|Upgrade requires not having this campaign status.
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_NOT_STATUS, cell.requires_status);
 	}
 	else if (infile.key == "visible_requires_status") {
-		// @ATTR upgrade.visible_requires_status|repeatable(string)|(Deprecated as of v1.11.75) Hide the upgrade if we don't have this campaign status.
+		// @ATTR upgrade.visible_requires_status|repeatable(status)|(Deprecated as of v1.11.75) Hide the upgrade if we don't have this campaign status.
 		infile.error("MenuPowers: visible_requires_status is deprecated. Use requires_status and visible_check_status=true instead.");
-		cell.requires_status.push_back(camp->registerStatus(infile.val));
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_STATUS, cell.requires_status);
 		cell.visible_check_status = true;
 	}
 	else if (infile.key == "visible_requires_not_status") {
-		// @ATTR upgrade.visible_requires_not_status|repeatable(string)|(Deprecated as of v1.11.75) Hide the upgrade if we have this campaign status.
+		// @ATTR upgrade.visible_requires_not_status|repeatable(status)|(Deprecated as of v1.11.75) Hide the upgrade if we have this campaign status.
 		infile.error("MenuPowers: visible_requires_not_status is deprecated. Use requires_not_status and visible_check_status=true instead.");
-		cell.requires_not_status.push_back(camp->registerStatus(infile.val));
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_NOT_STATUS, cell.requires_status);
 		cell.visible_check_status = true;
 	}
 	else if (infile.key == "visible") {
@@ -619,13 +618,8 @@ bool MenuPowers::checkRequirements(MenuPowersCell* pcell) {
 			return false;
 	}
 
-	for (size_t i = 0; i < pcell->requires_status.size(); ++i)
-		if (!camp->checkStatus(pcell->requires_status[i]))
-			return false;
-
-	for (size_t i = 0; i < pcell->requires_not_status.size(); ++i)
-		if (camp->checkStatus(pcell->requires_not_status[i]))
-			return false;
+	if (!camp->checkRequirementsInVector(pcell->requires_status))
+		return false;
 
 	for (size_t i = 0; i < pcell->requires_power.size(); ++i) {
 		if (!checkUnlocked(getCellByPowerIndex(pcell->requires_power[i])))
@@ -646,13 +640,8 @@ bool MenuPowers::checkRequirementStatus(MenuPowersCell* pcell) {
 	if (!pcell)
 		return false;
 
-	for (size_t i = 0; i < pcell->requires_status.size(); ++i)
-		if (!camp->checkStatus(pcell->requires_status[i]))
-			return false;
-
-	for (size_t i = 0; i < pcell->requires_not_status.size(); ++i)
-		if (camp->checkStatus(pcell->requires_not_status[i]))
-			return false;
+	if (!camp->checkRequirementsInVector(pcell->requires_status))
+		return false;
 
 	return true;
 }

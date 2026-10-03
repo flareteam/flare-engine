@@ -37,6 +37,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #include "SharedResources.h"
 #include "UtilsFileSystem.h"
 #include "UtilsParsing.h"
+#include <sstream>
 
 QuestLog::QuestLog(MenuLog *_log) {
 	log = _log;
@@ -86,8 +87,8 @@ void QuestLog::load(const std::string& filename) {
 				quests.back().name = msg->get(infile.val);
 			}
 			else if (infile.key == "complete_status") {
-				// @ATTR complete_status|string|If this status is set, the quest will be displayed as completed.
-				quests.back().complete_status = camp->registerStatus(infile.val);
+				// @ATTR complete_status|list(status)|If this status is set, the quest will be displayed as completed.
+				camp->parseStatusList(infile.val, EventComponent::REQUIRES_STATUS, quests.back().complete_status);
 			}
 
 			continue;
@@ -148,6 +149,18 @@ void QuestLog::load(const std::string& filename) {
 
 			ev.components.push_back(ec);
 		}
+		else if (infile.key == "show_status") {
+			// @ATTR quest.show_status|string|Displays the value of the given status ID after the quest text.
+			EventComponent ec;
+			ec.type = EventComponent::QUEST_SHOW_STATUS;
+			ec.status = camp->registerStatus(infile.val);
+			quests.back().status_values[ec.status] = camp->getStatusValue(ec.status);
+
+			// quest group id
+			ec.data[0].Int = static_cast<int>(quests.size()-1);
+
+			ev.components.push_back(ec);
+		}
 		else {
 			Utils::logError("QuestLog: %s is not a valid key.", infile.key.c_str());
 		}
@@ -170,6 +183,7 @@ void QuestLog::logic() {
 void QuestLog::createQuestList() {
 	std::vector<size_t> temp_quest_ids;
 	std::vector<size_t> temp_complete_quest_ids;
+	bool status_values_changed = false;
 
 	// check quest requirements
 	for (size_t i=0; i<quest_sections.size(); i++) {
@@ -177,21 +191,34 @@ void QuestLog::createQuestList() {
 			// passed requirement checks, add ID to active quest list
 			temp_quest_ids.push_back(i);
 		}
+
+		// check if status values have changed
+		for (size_t j = 0; j < quest_sections[i].size(); ++j) {
+			if (quest_sections[i][j].type == EventComponent::QUEST_SHOW_STATUS) {
+				StatusID status_id = quest_sections[i][j].status;
+				size_t quest_id = quest_sections[i][j].data[0].Int;
+				int new_value = camp->getStatusValue(status_id);
+
+				if (quests[quest_id].status_values[status_id] != new_value) {
+					quests[quest_id].status_values[status_id] = new_value;
+					status_values_changed = true;
+					break;
+				}
+			}
+		}
 	}
 
 	// check quest completion status
 	for (size_t i=0; i<quests.size(); ++i) {
-		if (!quests[i].name.empty() && quests[i].complete_status != 0) {
-			if (camp->checkStatus(quests[i].complete_status)) {
+		if (!quests[i].name.empty() && !quests[i].complete_status.empty()) {
+			if (camp->checkRequirementsInVector(quests[i].complete_status)) {
 				temp_complete_quest_ids.push_back(i);
 			}
 		}
 	}
 
 	// check if we actually need to update the quest log
-	bool refresh_quest_list = false;
-	if (temp_quest_ids != active_quest_ids || temp_complete_quest_ids != complete_quest_ids)
-		refresh_quest_list = true;
+	bool refresh_quest_list = (temp_quest_ids != active_quest_ids || temp_complete_quest_ids != complete_quest_ids || status_values_changed);
 
 	// update the quest log
 	if (refresh_quest_list) {
@@ -235,9 +262,23 @@ void QuestLog::createQuestList() {
 				}
 			}
 
+			StatusID value_status_id = 0;
+			for (size_t j=0; j<quest_sections[k].size(); j++) {
+				if (quest_sections[k][j].type == EventComponent::QUEST_SHOW_STATUS) {
+					value_status_id = quest_sections[k][j].status;
+				}
+			}
+
 			for (size_t j=0; j<quest_sections[k].size(); j++) {
 				if (quest_sections[k][j].type == EventComponent::QUEST_TEXT) {
-					log->add(quest_sections[k][j].s, MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
+					if (value_status_id > 0) {
+						std::stringstream ss;
+						ss << quest_sections[k][j].s << ": " << quests[quest_sections[k][j].data[0].Int].status_values[value_status_id];
+						log->add(ss.str(), MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
+					}
+					else {
+						log->add(quest_sections[k][j].s, MenuLog::TYPE_QUESTS, WidgetLog::MSG_UNIQUE);
+					}
 
 					int quest_id = quest_sections[k][j].data[0].Int;
 					if (next_quest_id != quest_id) {

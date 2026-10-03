@@ -188,9 +188,8 @@ Map::Map()
 	, save_fogofwar(eset->misc.save_fogofwar)
 	, force_spawn_pos(false)
 	, procgen_type(Chunk::TYPE_EMPTY)
-	, procgen_unique_status_id(0)
+	, procgen_unique_status()
 	, procgen_reset_status()
-	, procgen_reset_status_id(0)
 {
 }
 
@@ -303,7 +302,7 @@ int Map::load(const std::string& fname, bool load_procgen_cache) {
 	// if a previously generated map exists, load it from disk cache
 	// otherwise, save the generated map to disk
 	if (!procgen_regions.empty()) {
-		if (!camp->checkStatus(procgen_reset_status_id) && Filesystem::fileExists(procgen_filename)) {
+		if (!camp->checkStatusEx(&procgen_reset_status) && Filesystem::fileExists(procgen_filename)) {
 			return load(fname, Map::LOAD_PROCGEN_CACHE);
 		}
 		else {
@@ -482,13 +481,14 @@ void Map::loadHeader(FileParser &infile) {
 		}
 	}
 	else if (infile.key == "procgen_unique_status") {
-		// @ATTR procgen_unique_status|string|Sets this campaign status once this map is placed as a chunk during procedural generation. Once the status is set, the chunk will no longer be eligible to be placed.
-		procgen_unique_status_id = camp->registerStatus(infile.val);
+		// @ATTR procgen_unique_status|status|Sets this campaign status once this map is placed as a chunk during procedural generation. Once the status is set, the chunk will no longer be eligible to be placed.
+		procgen_unique_status.type = EventComponent::SET_STATUS;
+		camp->parseStatus(infile.val, &procgen_unique_status);
 	}
 	else if (infile.key == "procgen_reset_status") {
-		// @ATTR procgen_reset_status|string|If the map contains a procgen region, it will be regenerated if this campaign status is set.
-		procgen_reset_status = infile.val;
-		procgen_reset_status_id = camp->registerStatus(procgen_reset_status);
+		// @ATTR procgen_reset_status|status|If the map contains a procgen region, it will be regenerated if this campaign status is set.
+		procgen_reset_status.type = EventComponent::REQUIRES_STATUS;
+		camp->parseStatus(infile.val, &procgen_reset_status);
 	}
 	else if (infile.key == "orientation") {
 		// this is only used by Tiled when importing Flare maps
@@ -1388,7 +1388,7 @@ void Map::procGenFillArea(const std::string& config_filename, const Rect& area) 
 			valid_chunks.clear();
 			for (size_t i = 0; i < chunk_maps[chunk->type].size(); ++i) {
 				Map* test_map = chunk_maps[chunk->type][i];
-				if (test_map->procgen_unique_status_id > 0 && camp->checkStatus(test_map->procgen_unique_status_id))
+				if (test_map->procgen_unique_status.status > 0 && camp->checkStatus(test_map->procgen_unique_status.status))
 					continue;
 
 				valid_chunks.push_back(i);
@@ -1417,8 +1417,8 @@ void Map::procGenFillArea(const std::string& config_filename, const Rect& area) 
 
 			Map* chunk_map = chunk_maps[chunk->type][chunk->variant];
 
-			if (chunk_map->procgen_unique_status_id > 0) {
-				camp->setStatus(chunk_map->procgen_unique_status_id);
+			if (chunk_map->procgen_unique_status.status > 0) {
+				camp->setStatusEx(&chunk_map->procgen_unique_status);
 			}
 
 			size_t link_chunk_variant = 0;

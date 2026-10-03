@@ -4,6 +4,7 @@ Engine features:
 
 * Gameplay
 	- Added 'poise_style' property to engine/combat.txt config.
+	- Added support for integer-based campaign statuses.
 
 * Items
 	- Added 'crafting_items' property to Items.

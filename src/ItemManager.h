@@ -27,6 +27,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define ITEM_MANAGER_H
 
 #include "CommonIncludes.h"
+#include "EventManager.h"
 #include "Utils.h"
 
 class FileParser;
@@ -301,6 +302,7 @@ public:
 	std::vector<size_t> disable_slots; // if this item is equipped, it will disable slots that match the types in the list
 	std::vector<LevelScaledValue> requires_stat;
 	std::vector<ItemStack> crafting_items;
+	std::vector<EventComponent> pickup_status_list; // populated when parsePickupStatuses() is called
 
 	LevelScaledValue requires_level;   // Player level must match or exceed this value to use item
 	LevelScaledValue price;            // if price = 0 the item cannot be sold
@@ -370,6 +372,7 @@ public:
 	ItemID verifyID(ItemID item_id, FileParser* infile, bool allow_zero, bool allocate);
 	ItemID getExtendedItem(ItemID item_id);
 	void getExtendedStacks(ItemID item_id, unsigned quantity, std::vector<ItemStack>& stacks);
+	void parsePickupStatuses();
 
 	std::vector<Item*> items;
 	std::vector<ItemType> item_types;

@@ -47,8 +47,7 @@ private:
 		bool render_above;
 		bool automatic;
 		int duration;
-		std::vector<StatusID> requires_status;
-		std::vector<StatusID> requires_not_status;
+		std::vector<EventComponent> requires_status;
 
 		VisualEffect()
 			: id("")
@@ -58,7 +57,6 @@ private:
 			, automatic(false)
 			, duration(0)
 			, requires_status()
-			, requires_not_status()
 		{}
 	};
 
@@ -76,8 +74,7 @@ private:
 	std::vector<EventComponent> craft_random_table;
 	Point craft_random_table_count;
 
-	std::vector<StatusID> vendor_requires_status;
-	std::vector<StatusID> vendor_requires_not_status;
+	std::vector<EventComponent> vendor_requires_status;
 
 	std::vector<std::string> portrait_filenames;
 

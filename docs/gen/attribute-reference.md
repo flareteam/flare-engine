@@ -57,3 +57,17 @@ Attribute descriptions are in the following format: section.attributename, `valu
 
 `level_scaled_value`, a string representing a key/value pair that is delimited by a colon (':'). The first half represents the scaling method, and can be one of the following values: `base`, `player_level`, `item_level`, or a primary stat ID. The second half is the value, which is a float. For convenience, it is possible to specify only the value part to define the 'base' value (e.g. `price=10` is the same as `price=base:10`). Level scaling assumes level 1 is included in the base. So a level 5 item with `price=item_level:1` would equate to 4, not 5. Additionally, the result can be rounded and/or clamped. To round, use `round:true`. To set the minimum to, for example, 0, use `min:0`. Likewise, `max:1` would set the maximum to 1.
 
+`status`, a string expression for setting and checking campaign statuses. The simplest form is a plain identifier with no parentheses, which is treated as a boolean flag. The other form is an expression that uses the following rules:
+
+Format: `(<id><operator><integer>)`
+
+Operators (for setting status): `= + - * / %`
+
+Operators (for checking status): `== < > <= >= !=`
+
+Examples:
+
+- `set_status=my_boolean`
+- `set_status=(golbins_killed+1)`
+- `requires_status=(goblins_killed>0)`
+

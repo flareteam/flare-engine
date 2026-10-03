@@ -287,9 +287,8 @@ public:
 	bool save_fogofwar;
 	bool force_spawn_pos;
 	size_t procgen_type;
-	StatusID procgen_unique_status_id;
-	std::string procgen_reset_status;
-	StatusID procgen_reset_status_id;
+	EventComponent procgen_unique_status;
+	EventComponent procgen_reset_status;
 
 };
 

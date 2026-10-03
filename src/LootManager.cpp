@@ -766,7 +766,7 @@ void LootManager::loadLootTables() {
 					ec->data[LOOT_EC_QUANTITY_MIN].Int = std::max(Parse::popFirstInt(infile.val), 1);
 					ec->data[LOOT_EC_QUANTITY_MAX].Int = std::max(Parse::popFirstInt(infile.val), ec->data[LOOT_EC_QUANTITY_MIN].Int);
 				}
-				// @ATTR loot.requires_status|string|A single campaign status that is required for the item to be able to drop.
+				// @ATTR loot.requires_status|string|A single campaign status that is required for the item to be able to drop. Status IDs only; status expressions are not supported here.
 				else if (infile.key == "requires_status") {
 					ec->status = camp->registerStatus(Parse::popFirstString(infile.val));
 				}

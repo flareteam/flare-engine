@@ -28,6 +28,7 @@ FLARE.  If not, see http://www.gnu.org/licenses/
 #define GAMESTATEPLAY_H
 
 #include "CommonIncludes.h"
+#include "EventManager.h"
 #include "GameState.h"
 #include "Utils.h"
 
@@ -44,8 +45,7 @@ public:
 	std::string title;
 	int level;
 	PowerID power;
-	std::vector<StatusID> requires_status;
-	std::vector<StatusID> requires_not_status;
+	std::vector<EventComponent> requires_status;
 	std::string primary_stat_1;
 	std::string primary_stat_2;
 
@@ -54,7 +54,6 @@ public:
 		, level(0)
 		, power(0)
 		, requires_status()
-		, requires_not_status()
 		, primary_stat_1("")
 		, primary_stat_2("") {
 	}

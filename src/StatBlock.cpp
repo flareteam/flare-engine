@@ -164,10 +164,10 @@ StatBlock::StatBlock()
 	, teleport_destination()
 	, currency(0)
 	, death_penalty(false)
-	, defeat_status(0)			// enemy only
-	, convert_status(0)		// enemy only
-	, quest_loot_requires_status(0)	// enemy only
-	, quest_loot_requires_not_status(0)		// enemy only
+	, defeat_status()			// enemy only
+	, convert_status()		// enemy only
+	, quest_loot_requires_status()	// enemy only
+	, quest_loot_requires_not_status()		// enemy only
 	, quest_loot_id(0)			// enemy only
 	, first_defeat_loot(0)		// enemy only
 	, gfx_base("male")
@@ -680,16 +680,20 @@ void StatBlock::load(const std::string& filename) {
 				loot_count.y = std::max(loot_count.y, loot_count.x);
 			}
 		}
-		// @ATTR defeat_status|string|Campaign status to set upon death.
-		else if (infile.key == "defeat_status") defeat_status = camp->registerStatus(infile.val);
-		// @ATTR convert_status|string|Campaign status to set upon being converted to a player ally.
-		else if (infile.key == "convert_status") convert_status = camp->registerStatus(infile.val);
+		// @ATTR defeat_status|status|Campaign status to set upon death.
+		else if (infile.key == "defeat_status")
+			camp->parseStatus(infile.val, &defeat_status);
+
+		// @ATTR convert_status|status|Campaign status to set upon being converted to a player ally.
+		else if (infile.key == "convert_status")
+			camp->parseStatus(infile.val, &convert_status);
+
 		// @ATTR first_defeat_loot|item_id|Drops this item upon first death (requires defeat_status to be set).
 		else if (infile.key == "first_defeat_loot") {
 			if (items)
 				first_defeat_loot = items->verifyID(Parse::toItemID(infile.val), &infile, ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
 		}
-		// @ATTR quest_loot|string, string, item_id : Required status, Required not status, Item|Drops this item when campaign status is met. Can't drop at the same time as first_defeat_loot.
+		// @ATTR quest_loot|status, status, item_id : Required status, Required not status, Item|Drops this item when campaign status is met. Can't drop at the same time as first_defeat_loot.
 		else if (infile.key == "quest_loot") {
 			if (items) {
 				std::string req_status = Parse::popFirstString(infile.val);
@@ -697,8 +701,8 @@ void StatBlock::load(const std::string& filename) {
 
 				quest_loot_id = items->verifyID(Parse::toItemID(Parse::popFirstString(infile.val)), &infile, ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
 				if (quest_loot_id > 0) {
-					quest_loot_requires_status = camp->registerStatus(req_status);
-					quest_loot_requires_not_status = camp->registerStatus(req_not_status);
+					camp->parseStatus(req_status, &quest_loot_requires_status);
+					camp->parseStatus(req_not_status, &quest_loot_requires_not_status);
 				}
 			}
 		}
@@ -892,26 +896,26 @@ void StatBlock::takeDamage(float dmg, bool crit, int source_type) {
 			// enemy died; do rewards
 			if (!hero_ally || converted) {
 				// some creatures create special loot if we're on a quest
-				if (quest_loot_requires_status != 0) {
+				if (quest_loot_requires_status.status != 0) {
 					// the loot manager will check quest_loot_id
 					// if set (not zero), the loot manager will 100% generate that loot.
-					if (!(camp->checkStatus(quest_loot_requires_status) && !camp->checkStatus(quest_loot_requires_not_status))) {
+					if (!(camp->checkStatusEx(&quest_loot_requires_status) && !camp->checkStatusEx(&quest_loot_requires_not_status))) {
 						quest_loot_id = 0;
 					}
 				}
 
 				// defeating some creatures (e.g. bosses) affects the story
-				if (defeat_status != 0) {
+				if (defeat_status.status != 0) {
 					// some creatures drop special loot the first time they are defeated
 					// this must be done in conjunction with defeat status
 					// TODO this replaces quest loot! Maybe support dropping both?
 					if (first_defeat_loot > 0) {
-						if (!camp->checkStatus(defeat_status)) {
+						if (!camp->checkStatusEx(&defeat_status)) {
 							quest_loot_id = first_defeat_loot;
 						}
 					}
 
-					camp->setStatus(defeat_status);
+					camp->setStatusEx(&defeat_status);
 				}
 
 				// reward XP; adjust for party exp if necessary
@@ -1308,8 +1312,8 @@ void StatBlock::logic() {
 	if (!hero && effects.convert != converted) {
 		converted = !converted;
 		hero_ally = !hero_ally;
-		if (convert_status != 0) {
-			camp->setStatus(convert_status);
+		if (convert_status.status != 0) {
+			camp->setStatusEx(&convert_status);
 		}
 	}
 }

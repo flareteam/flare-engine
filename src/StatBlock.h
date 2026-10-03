@@ -300,10 +300,10 @@ public:
 	bool death_penalty;
 
 	// Campaign event interaction
-	StatusID defeat_status;
-	StatusID convert_status;
-	StatusID quest_loot_requires_status;
-	StatusID quest_loot_requires_not_status;
+	EventComponent defeat_status;
+	EventComponent convert_status;
+	EventComponent quest_loot_requires_status;
+	EventComponent quest_loot_requires_not_status;
 	ItemID quest_loot_id;
 	ItemID first_defeat_loot;
 
