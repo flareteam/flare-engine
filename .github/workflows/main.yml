@@ -46,6 +46,21 @@ jobs:
         if: steps.build.outcome != 'success'
         run: exit 1
 
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - name: Install dependencies
+        run: brew install cmake libvorbis sdl2 sdl2_image sdl2_mixer sdl2_ttf
+
+      - name: Build
+        run: cmake . && make
+
+      - name: Package
+        run: ./distribution/macos/package_osx.sh flare homebrew
+
   cppcheck:
     runs-on: ubuntu-24.04
     steps:
