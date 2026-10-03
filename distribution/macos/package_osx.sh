@@ -52,42 +52,47 @@ if [ ${FLARE_DEPS_SRC} == "http" ]; then
   tar -zxf ${DST}/flare_osx_dependencies.tar.gz -C ${DST}
   rm -f ${DST}/flare_osx_dependencies.tar.gz
 elif [ ${FLARE_DEPS_SRC} == "homebrew" ]; then
+  # Homebrew lives in /opt/homebrew on Apple Silicon and /usr/local on Intel
+  BREW_PREFIX=$(brew --prefix)
   LIB=${DST}/lib
   mkdir ${LIB}
-  # SDL2
-  cp /usr/local/opt/sdl2/LICENSE.txt ${LIB}/SDL2-LICENSE.txt
-  cp /usr/local/opt/sdl2/README.md ${LIB}/SDL2-README.md
-  cp /usr/local/opt/sdl2/lib/libSDL2-2.0.0.dylib ${LIB}
-  cp /usr/local/opt/sdl2_image/lib/libSDL2_image-2.0.0.dylib ${LIB}
-  cp /usr/local/opt/sdl2_mixer/lib/libSDL2_mixer-2.0.0.dylib ${LIB}
-  cp /usr/local/opt/sdl2_ttf/lib/libSDL2_ttf-2.0.0.dylib ${LIB}
-  # VORBIS
-  cp /usr/local/opt/libvorbis/COPYING ${LIB}/VORBIS-COPYING
-  cp /usr/local/opt/libvorbis/lib/libvorbis.0.dylib ${LIB}
-  cp /usr/local/opt/libvorbis/lib/libvorbisenc.2.dylib ${LIB}
-  cp /usr/local/opt/libvorbis/lib/libvorbisfile.3.dylib ${LIB}
-  # OGG
-  cp /usr/local/opt/libogg/COPYING ${LIB}/OGG-COPYING
-  cp /usr/local/opt/libogg/lib/libogg.0.dylib ${LIB}
-  # PNG
-  cp /usr/local/opt/libpng/lib/libpng16.16.dylib ${LIB}
 
-  # Verify all homebrew deps using using otool
-  for DYLIB in ${LIB}/*.dylib; do
-    #echo "dylib: ${DYLIB}"
-    for LINE in $(otool -L ${DYLIB}); do
-      #echo "line: ${LINE}"
-      if [[ $LINE == *"/usr/local/opt/"* ]]; then
-	NEED=$(basename ${LINE})
-	#echo "${DYLIB} need: ${NEED}"
-	FILE="${LIB}/${NEED}"
-	if [ ! -f "${FILE}" ]; then
-          echo "${NEED} not found, copying"
-	  cp ${LINE} ${LIB}
-        fi
+  # Recursively copy all Homebrew libraries needed by the given binary
+  copy_brew_deps() {
+    local BIN_DIR=$(dirname "$1")
+    local DEP SRC NAME
+    for DEP in $(otool -L "$1" | tail -n +2 | awk '{print $1}'); do
+      case ${DEP} in
+        ${BREW_PREFIX}/*) SRC=${DEP} ;;
+        # Homebrew sets up @rpath/@loader_path relative to the library itself
+        @rpath/*|@loader_path/*) SRC=${BIN_DIR}/${DEP#*/} ;;
+        *) continue ;;
+      esac
+      NAME=$(basename "${DEP}")
+      if [ ! -f "${LIB}/${NAME}" ]; then
+        echo "copying ${NAME}"
+        cp "${SRC}" "${LIB}/${NAME}"
+        chmod u+w "${LIB}/${NAME}"
+        copy_brew_deps "${SRC}"
       fi
     done
-  done
+  }
+
+  # Licenses
+  cp $(brew --prefix sdl2)/LICENSE.txt ${LIB}/SDL2-LICENSE.txt
+  cp $(brew --prefix sdl2)/README.md ${LIB}/SDL2-README.md
+  cp $(brew --prefix libvorbis)/COPYING ${LIB}/VORBIS-COPYING
+  cp $(brew --prefix libogg)/COPYING ${LIB}/OGG-COPYING
+
+  # Homebrew's sdl2 is now sdl2-compat, which loads SDL3 at runtime with dlopen()
+  SDL3_LIB=$(brew --prefix sdl3 2>/dev/null)/lib/libSDL3.0.dylib
+  if [ -f "${SDL3_LIB}" ]; then
+    cp ${SDL3_LIB} ${LIB}
+    ln -s libSDL3.0.dylib ${LIB}/libSDL3.dylib
+    copy_brew_deps ${SDL3_LIB}
+  fi
+
+  copy_brew_deps ${FLARE_EXE}
 
 else
   echo "'${FLARE_DEPS_SRC}' unknown dependency source"
