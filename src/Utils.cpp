@@ -638,11 +638,11 @@ size_t Utils::stringFindCaseInsensitive(const std::string &_a, const std::string
 }
 
 std::string Utils::floatToString(const float value, size_t precision) {
-	size_t format_buffer_size = 16;
+	const size_t format_buffer_size = 16;
 	char format_buffer[format_buffer_size];
 	snprintf(format_buffer, format_buffer_size, "%%.%df", static_cast<int>(precision));
 
-	size_t buffer_size = 1024;
+	const size_t buffer_size = 1024;
 	char buffer[buffer_size];
 	snprintf(buffer, buffer_size, format_buffer, value);
 	std::string temp(buffer);

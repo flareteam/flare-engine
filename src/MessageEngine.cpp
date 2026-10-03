@@ -120,7 +120,7 @@ std::string MessageEngine::getv(const std::string key, ...) {
 
 	va_list args;
 	const char* format = message.c_str();
-	size_t buffer_size = 8192;
+	const size_t buffer_size = 8192;
 	char buffer[buffer_size];
 
 	va_start(args, key);

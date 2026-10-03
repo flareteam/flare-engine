@@ -937,7 +937,7 @@ WidgetSlot* MenuActionBar::getSlotFromPosition(const Point& position) {
 }
 
 size_t MenuActionBar::getCurrentSlotIndexFromTablist() {
-	int tablist_index = static_cast<size_t>(getCurrentTabList()->getCurrent());
+	int tablist_index = getCurrentTabList()->getCurrent();
 	Widget* current_slot = getCurrentTabList()->getWidgetByIndex(tablist_index);
 	if (!current_slot)
 		return slots.size() + MENU_COUNT;
