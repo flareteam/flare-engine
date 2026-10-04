@@ -860,8 +860,13 @@ bool MenuCharacter::checkUpgrade() {
 	if (pc->stats.hp > 0 && checkSkillPoints()) {
 		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 			if (primary_up[i]) {
+				// temporarily set level_up to change recalc() behavior
+				bool temp = pc->stats.level_up;
+				pc->stats.level_up = true;
+
 				pc->stats.primary[i]++;
 				pc->stats.recalc(); // equipment applied by MenuManager
+				pc->stats.level_up = temp;
 				primary_up[i] = false;
 				return true;
 			}

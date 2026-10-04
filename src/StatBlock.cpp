@@ -199,6 +199,8 @@ StatBlock::StatBlock()
 	, layer_def(8, std::vector<unsigned>())
 	, animation_slots()
 	, critdie_enabled(false)
+	, levelup_restore_hp(true)
+	, levelup_restore_mp(true)
 	, ai_debuff_power(NULL)
 	, ai_hit_power(NULL)
 {
@@ -962,11 +964,16 @@ void StatBlock::recalc() {
 
 	applyEffects();
 
-	hp = get(Stats::HP_MAX);
-	mp = get(Stats::MP_MAX);
+	if (!level_up || (level_up && (levelup_restore_hp || hp > get(Stats::HP_MAX))))
+		hp = get(Stats::HP_MAX);
+
+	if (!level_up || (level_up && (levelup_restore_mp || mp > get(Stats::MP_MAX))))
+		mp = get(Stats::MP_MAX);
 
 	for (size_t i = 0; i < resource_stats.size(); ++i) {
-		resource_stats[i] = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+		float resource_max = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
+		if (!level_up || (level_up && (eset->resource_stats.list[i].levelup_restore || resource_stats[i] > resource_max)))
+			resource_stats[i] = resource_max;
 	}
 
 }
@@ -1383,6 +1390,14 @@ void StatBlock::loadHeroStats() {
 			else if (infile.key == "power_points_per_level") {
 				// @ATTR power_points_per_level|int|The amount of power points awarded each level.
 				power_points_per_level = value;
+			}
+			else if (infile.key == "levelup_restore_hp") {
+				// @ATTR levelup_restore_hp|boolean|If true, HP will be restored on level up. Defaults to true.
+				levelup_restore_hp = Parse::toBool(infile.val);
+			}
+			else if (infile.key == "levelup_restore_mp") {
+				// @ATTR levelup_restore_mp|boolean|If true, MP will be restored on level up. Defaults to true.
+				levelup_restore_mp = Parse::toBool(infile.val);
 			}
 			else if (!valid) {
 				infile.error("StatBlock: '%s' is not a valid key.", infile.key.c_str());

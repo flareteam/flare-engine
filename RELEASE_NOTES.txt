@@ -19,6 +19,8 @@ Engine features:
 	- Added 'vendor_tab_enabled' property to NPCs.
 	- Added 'disabled' option to 'combat_style' StatBlock property.
 	- Added 'visual_effect' to NPCs for showing quest markers, emotes, etc.
+	- Added 'levelup_restore_hp' and 'levelup_restore_mp' to engine/stats.txt config.
+	- Added 'levelup_restore' to engine/resource_stats.txt config.
 
 * Powers
 	- Added 'meta_power_provides_tooltip' property to Powers.

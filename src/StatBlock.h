@@ -360,6 +360,9 @@ public:
 
 	bool critdie_enabled;
 
+	bool levelup_restore_hp;
+	bool levelup_restore_mp;
+
 	AIPower* ai_debuff_power;
 	AIPower* ai_hit_power;
 };

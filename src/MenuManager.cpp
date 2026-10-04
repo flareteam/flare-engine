@@ -660,8 +660,6 @@ void MenuManager::logic() {
 	if (chr->checkUpgrade() || pc->stats.level_up) {
 		// apply equipment and max hp/mp
 		inv->applyEquipment();
-		pc->stats.hp = pc->stats.get(Stats::HP_MAX);
-		pc->stats.mp = pc->stats.get(Stats::MP_MAX);
 		pc->stats.level_up = false;
 	}
 

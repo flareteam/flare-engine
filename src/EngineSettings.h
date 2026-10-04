@@ -362,6 +362,8 @@ public:
 			std::string text_log_low;
 			std::string text_tooltip_heal;
 			std::string text_tooltip_cost;
+
+			bool levelup_restore;
 		};
 
 		void load();
