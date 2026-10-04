@@ -1392,11 +1392,11 @@ void StatBlock::loadHeroStats() {
 				power_points_per_level = value;
 			}
 			else if (infile.key == "levelup_restore_hp") {
-				// @ATTR levelup_restore_hp|boolean|If true, HP will be restored on level up. Defaults to true.
+				// @ATTR levelup_restore_hp|bool|If true, HP will be restored on level up. Defaults to true.
 				levelup_restore_hp = Parse::toBool(infile.val);
 			}
 			else if (infile.key == "levelup_restore_mp") {
-				// @ATTR levelup_restore_mp|boolean|If true, MP will be restored on level up. Defaults to true.
+				// @ATTR levelup_restore_mp|bool|If true, MP will be restored on level up. Defaults to true.
 				levelup_restore_mp = Parse::toBool(infile.val);
 			}
 			else if (!valid) {

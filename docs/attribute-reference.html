@@ -588,7 +588,7 @@ code {
 
 <p><strong>resource_stat.text_tooltip_cost</strong> | <code>string</code> | The text in Power tooltips that describes the casting cost of this resource.</p>
 
-<p><strong>resource_stat.levelup_restore</strong> | <code>boolean</code> | If true, this resource stat will be restored on level up. Defaults to true.</p>
+<p><strong>resource_stat.levelup_restore</strong> | <code>bool</code> | If true, this resource stat will be restored on level up. Defaults to true.</p>
 
 <hr />
 
@@ -1128,7 +1128,7 @@ code {
 
 <p><strong>soundfx_craft</strong> | <code>filename</code> | Sound effect filename to play when crafting this item in the Vendor menu's Craft tab.</p>
 
-<p><strong>soundfx_craft_override</strong> | <code>boolean</code> | If false (the default), this item's soundfx_craft will play in unison with the Vendor's soundfx_craft. Otherwise, only this item's soundfx_craft will play.</p>
+<p><strong>soundfx_craft_override</strong> | <code>bool</code> | If false (the default), this item's soundfx_craft will play in unison with the Vendor's soundfx_craft. Otherwise, only this item's soundfx_craft will play.</p>
 
 <p><strong>gfx</strong> | <code>filename</code> | Filename of an animation set to display when the item is equipped.</p>
 
@@ -1178,9 +1178,9 @@ code {
 
 <p><strong>type.name</strong> | <code>string</code> | Item type name.</p>
 
-<p><strong>type.auto_pickup</strong> | <code>boolean</code> | Allows items of this type to be picked up automatically.</p>
+<p><strong>type.auto_pickup</strong> | <code>bool</code> | Allows items of this type to be picked up automatically.</p>
 
-<p><strong>type.auto_actionbar</strong> | <code>boolean</code> | Flags items of this type to be automatically added to the actionbar (if the item has a power) when obtained. Defaults to false, except if the 'id' of this type is 'consumable'.</p>
+<p><strong>type.auto_actionbar</strong> | <code>bool</code> | Flags items of this type to be automatically added to the actionbar (if the item has a power) when obtained. Defaults to false, except if the 'id' of this type is 'consumable'.</p>
 
 <hr />
 
@@ -2068,17 +2068,17 @@ code {
 
 <p><strong>npc.vendor_tab_enabled</strong> | <code>repeatable(["buy", "sell", "craft"], bool) : Tab, Enabled</code> | Sets the enabled state of the specified vendor tab for this NPC. The "buy" and "sell" tabs are enabled by default.</p>
 
-<p><strong>npc.vendor_gamble_buy</strong> | <code>boolean</code> | If true (the default is false), the damage, absorb and bonuses for randomized items on the Buy tab will be hidden until purchase.</p>
+<p><strong>npc.vendor_gamble_buy</strong> | <code>bool</code> | If true (the default is false), the damage, absorb and bonuses for randomized items on the Buy tab will be hidden until purchase.</p>
 
-<p><strong>npc.vendor_gamble_craft</strong> | <code>boolean</code> | If true (the default is false), the damage, absorb and bonuses for randomized items on the Craft tab will be hidden until purchase.</p>
+<p><strong>npc.vendor_gamble_craft</strong> | <code>bool</code> | If true (the default is false), the damage, absorb and bonuses for randomized items on the Craft tab will be hidden until purchase.</p>
 
 <p><strong>visual_effect.id</strong> | <code>string</code> | An identifer for this visual effect. Required.</p>
 
 <p><strong>visual_effect.animation</strong> | <code>filename</code> | The animation that will be played when this visual effect is triggered. Required.</p>
 
-<p><strong>visual_effect.render_above</strong> | <code>boolean</code> | Determines if the animation is rendered above or below the NPC. Defaults to true.</p>
+<p><strong>visual_effect.render_above</strong> | <code>bool</code> | Determines if the animation is rendered above or below the NPC. Defaults to true.</p>
 
-<p><strong>visual_effect.automatic</strong> | <code>boolean</code> | Determines if the visual effect will be applied automatically without having to be triggered from a dialog node. Defaults to false.</p>
+<p><strong>visual_effect.automatic</strong> | <code>bool</code> | Determines if the visual effect will be applied automatically without having to be triggered from a dialog node. Defaults to false.</p>
 
 <p><strong>visual_effect.duration</strong> | <code>duration</code> | Sets how long the visual effect will last.</p>
 
@@ -2306,7 +2306,7 @@ code {
 
 <p><strong>power.spawn_level</strong> | <code>["default", "fixed", "source_level", "source_stat", "hero_level", "hero_stat"], float, predefined_string : Mode, Multiplier, Primary stat</code> | The level of spawned creatures. The need for the last two parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode sets the multiplier as the enemy level. The level modes multiply with the target's level. The stat modes multiply by one of the target's primary stats. The stat is defined with the last parameter, which is simply the ID of the primary stat that should be used for scaling.</p>
 
-<p><strong>power.spawn_requires_unlocked_power</strong> | <code>boolean</code> | Defaults to true. When set to false, spawns won't be killed when the spawning power is locked.</p>
+<p><strong>power.spawn_requires_unlocked_power</strong> | <code>bool</code> | Defaults to true. When set to false, spawns won't be killed when the spawning power is locked.</p>
 
 <p><strong>power.target_neighbor</strong> | <code>int</code> | Target is changed to an adjacent tile within a radius.</p>
 
@@ -2538,9 +2538,9 @@ code {
 
 <p><strong>power_points_per_level</strong> | <code>int</code> | The amount of power points awarded each level.</p>
 
-<p><strong>levelup_restore_hp</strong> | <code>boolean</code> | If true, HP will be restored on level up. Defaults to true.</p>
+<p><strong>levelup_restore_hp</strong> | <code>bool</code> | If true, HP will be restored on level up. Defaults to true.</p>
 
-<p><strong>levelup_restore_mp</strong> | <code>boolean</code> | If true, MP will be restored on level up. Defaults to true.</p>
+<p><strong>levelup_restore_mp</strong> | <code>bool</code> | If true, MP will be restored on level up. Defaults to true.</p>
 
 <hr />
 

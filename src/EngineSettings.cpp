@@ -1511,7 +1511,7 @@ void EngineSettings::ResourceStats::load() {
 			// @ATTR resource_stat.text_tooltip_cost|string|The text in Power tooltips that describes the casting cost of this resource.
 			else if (infile.key == "text_tooltip_cost") current->text_tooltip_cost = msg->get(infile.val);
 
-			// @ATTR resource_stat.levelup_restore|boolean|If true, this resource stat will be restored on level up. Defaults to true.
+			// @ATTR resource_stat.levelup_restore|bool|If true, this resource stat will be restored on level up. Defaults to true.
 			else if (infile.key == "levelup_restore") current->levelup_restore = Parse::toBool(infile.val);
 
 			else infile.error("EngineSettings: '%s' is not a valid key.", infile.key.c_str());

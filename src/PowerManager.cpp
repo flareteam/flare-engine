@@ -1090,7 +1090,7 @@ void PowerManager::loadPowers() {
 			power->spawn_level.parse(infile);
 		}
 		else if (infile.key == "spawn_requires_unlocked_power") {
-			// @ATTR power.spawn_requires_unlocked_power|boolean|Defaults to true. When set to false, spawns won't be killed when the spawning power is locked.
+			// @ATTR power.spawn_requires_unlocked_power|bool|Defaults to true. When set to false, spawns won't be killed when the spawning power is locked.
 			power->spawn_requires_unlocked_power = Parse::toBool(infile.val);
 		}
 		else if (infile.key == "target_neighbor") {

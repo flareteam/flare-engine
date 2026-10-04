@@ -636,7 +636,7 @@ void ItemManager::loadItems(const std::string& filename) {
 			item->sfx_craft_id = snd->load(item->sfx_craft, "ItemManager");
 		}
 		else if (infile.key == "soundfx_craft_override") {
-			// @ATTR soundfx_craft_override|boolean|If false (the default), this item's soundfx_craft will play in unison with the Vendor's soundfx_craft. Otherwise, only this item's soundfx_craft will play.
+			// @ATTR soundfx_craft_override|bool|If false (the default), this item's soundfx_craft will play in unison with the Vendor's soundfx_craft. Otherwise, only this item's soundfx_craft will play.
 			item->sfx_craft_override = Parse::toBool(infile.val);
 		}
 		else if (infile.key == "gfx")
@@ -860,10 +860,10 @@ void ItemManager::loadTypes(const std::string& filename) {
 			// @ATTR type.name|string|Item type name.
 			else if (infile.key == "name")
 				current->name = infile.val;
-			// @ATTR type.auto_pickup|boolean|Allows items of this type to be picked up automatically.
+			// @ATTR type.auto_pickup|bool|Allows items of this type to be picked up automatically.
 			else if (infile.key == "auto_pickup")
 				current->auto_pickup = Parse::toBool(infile.val);
-			// @ATTR type.auto_actionbar|boolean|Flags items of this type to be automatically added to the actionbar (if the item has a power) when obtained. Defaults to false, except if the 'id' of this type is 'consumable'.
+			// @ATTR type.auto_actionbar|bool|Flags items of this type to be automatically added to the actionbar (if the item has a power) when obtained. Defaults to false, except if the 'id' of this type is 'consumable'.
 			else if (infile.key == "auto_actionbar")
 				current->auto_actionbar = Parse::toBool(infile.val);
 			else

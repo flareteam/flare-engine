@@ -373,11 +373,11 @@ bool NPC::load(const std::string& npc_id) {
 				}
 
 				else if (infile.key == "vendor_gamble_buy") {
-					// @ATTR npc.vendor_gamble_buy|boolean|If true (the default is false), the damage, absorb and bonuses for randomized items on the Buy tab will be hidden until purchase.
+					// @ATTR npc.vendor_gamble_buy|bool|If true (the default is false), the damage, absorb and bonuses for randomized items on the Buy tab will be hidden until purchase.
 					vendor_gamble_buy = Parse::toBool(infile.val);
 				}
 				else if (infile.key == "vendor_gamble_craft") {
-					// @ATTR npc.vendor_gamble_craft|boolean|If true (the default is false), the damage, absorb and bonuses for randomized items on the Craft tab will be hidden until purchase.
+					// @ATTR npc.vendor_gamble_craft|bool|If true (the default is false), the damage, absorb and bonuses for randomized items on the Craft tab will be hidden until purchase.
 					vendor_gamble_craft = Parse::toBool(infile.val);
 				}
 
@@ -401,11 +401,11 @@ bool NPC::load(const std::string& npc_id) {
 						vfx->animation = infile.val;
 					}
 					else if (infile.key == "render_above") {
-						// @ATTR visual_effect.render_above|boolean|Determines if the animation is rendered above or below the NPC. Defaults to true.
+						// @ATTR visual_effect.render_above|bool|Determines if the animation is rendered above or below the NPC. Defaults to true.
 						vfx->render_above = Parse::toBool(infile.val);
 					}
 					else if (infile.key == "automatic") {
-						// @ATTR visual_effect.automatic|boolean|Determines if the visual effect will be applied automatically without having to be triggered from a dialog node. Defaults to false.
+						// @ATTR visual_effect.automatic|bool|Determines if the visual effect will be applied automatically without having to be triggered from a dialog node. Defaults to false.
 						vfx->automatic = Parse::toBool(infile.val);
 					}
 					else if (infile.key == "duration") {
