@@ -245,6 +245,8 @@ void InputState::loadKeyBindings(bool load_user_binds) {
 					else {
 						binding[key].push_back(input_bind);
 					}
+
+					std::sort(binding[key].begin(), binding[key].end(), inputBindCompare);
 				}
 			}
 		}
@@ -289,6 +291,7 @@ void InputState::saveKeyBindings() {
 				outfile << config_keys[key] << "=-1\n";
 			}
 			else {
+				std::sort(binding[key].begin(), binding[key].end(), inputBindCompare);
 				for (size_t i = 0; i < binding[key].size(); ++i) {
 					outfile << config_keys[key] << "=" << binding[key][i].bind << "," << binding[key][i].type << "\n";
 				}
@@ -392,3 +395,8 @@ Point InputState::scaleMouse(unsigned int x, unsigned int y) {
 
 	return scaled_mouse;
 }
+
+bool InputState::inputBindCompare(const InputBind &a, const InputBind &b) {
+	return (a.type < b.type || (a.type == b.type && a.bind < b.bind));
+}
+

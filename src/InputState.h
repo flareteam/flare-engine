@@ -197,6 +197,7 @@ public:
 protected:
 	Point scaleMouse(unsigned int x, unsigned int y);
 	virtual int getBindFromString(const std::string& bind, int type) = 0;
+	static bool inputBindCompare(const InputBind &a, const InputBind &b);
 
 	bool un_press[KEY_COUNT];
 	bool press_axis[KEY_COUNT];
