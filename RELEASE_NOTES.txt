@@ -44,6 +44,7 @@ Engine features:
 	- Support hiding randomized item properties in Buy/Craft tabs per NPC. Let's go gambling!
 	- Dim items in vendor menu that that player can't afford.
 	- Added 'enable_main2_activate' to menus/actionbar.txt config.
+	- Add 'visible_when_empty' property to statbar menus.
 
 * Sound
 	- Added 'soundfx_craft' and 'soundfx_craft_override' properties to Items.

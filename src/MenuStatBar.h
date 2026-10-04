@@ -57,6 +57,7 @@ private:
 	bool enabled;
 	bool orientation;
 	bool custom_text_pos;
+	bool visible_when_empty;
 	std::string custom_string;
 	std::string bar_gfx;
 	std::string bar_gfx_background;

@@ -52,6 +52,7 @@ MenuStatBar::MenuStatBar(short _type, size_t _resource_stat_index)
 	, enabled(true)
 	, orientation(HORIZONTAL)
 	, custom_text_pos(false) // label will be placed in the middle of the bar
+	, visible_when_empty(true)
 	, custom_string("")
 	, bar_gfx("")
 	, bar_gfx_background("")
@@ -127,6 +128,10 @@ MenuStatBar::MenuStatBar(short _type, size_t _resource_stat_index)
 			// @ATTR enabled|bool|Determines if the bar will be rendered. Disable the bar completely by setting this to false.
 			else if (infile.key == "enabled") {
 				enabled = Parse::toBool(infile.val);
+			}
+			// @ATTR visible_when_empty|bool|Determines if the bar will be visible when the stat's value is zero. Defaults to true.
+			else if (infile.key == "visible_when_empty") {
+				visible_when_empty = Parse::toBool(infile.val);
 			}
 			else {
 				infile.error("MenuStatBar: '%s' is not a valid key.", infile.key.c_str());
@@ -223,6 +228,9 @@ bool MenuStatBar::disappear() {
 		timeout.tick();
 		if (timeout.isEnd())
 			return true;
+	}
+	else if (!visible_when_empty && stat_cur.Float == 0) {
+		return true;
 	}
 	return false;
 }
