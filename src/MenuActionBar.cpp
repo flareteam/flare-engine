@@ -975,6 +975,15 @@ void MenuActionBar::setupMenuButtons(MenuCharacter* chr, MenuInventory* inv, Men
 		tablist.add(menus[MENU_LOG]);
 }
 
+bool MenuActionBar::checkAllSlotsLocked() {
+	for (size_t i = 0; i < slots.size(); ++i) {
+		if (slots[i] && slots[i]->enabled && prevent_changing[i] == false)
+			return false;
+	}
+
+	return true;
+}
+
 MenuActionBar::~MenuActionBar() {
 
 	menu_act = NULL;

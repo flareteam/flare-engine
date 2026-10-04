@@ -113,6 +113,8 @@ public:
 
 	void setupMenuButtons(MenuCharacter* chr, MenuInventory* inv, MenuPowers* pow, MenuLog* questlog);
 
+	bool checkAllSlotsLocked();
+
 	unsigned slots_count;
 	std::vector<PowerID> hotkeys; // refer to power_index in PowerManager
 	std::vector<PowerID> hotkeys_temp; // temp for shapeshifting

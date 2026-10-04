@@ -539,6 +539,14 @@ void SaveLoad::loadGame() {
 		for (size_t i = 0; i < eset->primary_stats.list.size(); ++i) {
 			pc->stats.primary_starting[i] = pc_class->primary[i] + 1;
 		}
+
+		// if the player can't change the actionbar, load the powers from their class
+		if (menu->act->checkAllSlotsLocked()) {
+			for (int i = 0; i < MenuActionBar::SLOT_MAX; i++) {
+				hotkeys[i] = powers->verifyID(pc_class->hotkeys[i], NULL, PowerManager::ALLOW_ZERO_ID);
+			}
+			menu->act->set(hotkeys, !MenuActionBar::SET_SKIP_EMPTY);
+		}
 	}
 
 	// add legacy currency to inventory

@@ -89,6 +89,7 @@ Engine fixes:
 	- Fix incorrect amount of items being removed when removing from both the player's equipment and bag at the same time.
 	- Fix checking of item counts to include both equipment and bag, as opposed to only counting in one or the other.
 	- Fix active effect icons being split when they should be grouped if added out of order.
+	- For mods that don't allow actionbar customization, the default actionbar layout for the player's class is used in place of the one provided by their save file.
 
 * Sound
 	- Fix menu close sound effect not playing when closing Char/Inv/Pow/Log menu with the Cancel key.
