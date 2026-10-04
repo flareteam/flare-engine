@@ -67,7 +67,8 @@ MenuActionBar::MenuActionBar()
 	, updated(false)
 	, twostep_slot(-1)
 	, touch_slot(NULL)
-	, enable_gamepad_nav(true) {
+	, enable_gamepad_nav(true)
+	, enable_main2_activate(true) {
 
 	menu_labels.resize(MENU_COUNT);
 
@@ -180,6 +181,10 @@ MenuActionBar::MenuActionBar()
 			// @ATTR enable_gamepad_nav|bool|When true, the actionbar can be interacted with via the next/prev/activate menu bindings. Defaults to true.
 			else if (infile.key == "enable_gamepad_nav") {
 				enable_gamepad_nav = Parse::toBool(infile.val);
+			}
+			// @ATTR enable_main2_activate|bool|Enables using MAIN2 on slots to activate powers. Defaults to true.
+			else if (infile.key == "enable_main2_activate") {
+				enable_main2_activate = Parse::toBool(infile.val);
 			}
 
 			else infile.error("MenuActionBar: '%s' is not a valid key.", infile.key.c_str());
@@ -611,7 +616,7 @@ void MenuActionBar::checkAction(std::vector<ActionData> &action_queue) {
 		}
 
 		// mouse/touch click
-		else if ((inpt->mode == InputState::MODE_TOUCHSCREEN && touch_slot == slots[i]) || (inpt->mode != InputState::MODE_TOUCHSCREEN && inpt->usingMouse() && !pc->using_main1 && !pc->using_main2 && slots[i]->checkClick() == WidgetSlot::ACTIVATE)) {
+		else if ((inpt->mode == InputState::MODE_TOUCHSCREEN && touch_slot == slots[i]) || (inpt->mode != InputState::MODE_TOUCHSCREEN && inpt->usingMouse() && !pc->using_main1 && !pc->using_main2 && slots[i]->checkClick() == WidgetSlot::ACTIVATE && enable_main2_activate)) {
 			touch_slot = NULL;
 			have_aim = false;
 			slot_activated[i] = true;

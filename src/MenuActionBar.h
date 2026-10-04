@@ -133,6 +133,7 @@ public:
 	WidgetSlot* touch_slot;
 
 	bool enable_gamepad_nav;
+	bool enable_main2_activate;
 };
 
 #endif

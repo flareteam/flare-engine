@@ -43,6 +43,7 @@ Engine features:
 	- Tooltips for Character menu upgrade buttons now show bonuses that will be applied to minor stats.
 	- Support hiding randomized item properties in Buy/Craft tabs per NPC. Let's go gambling!
 	- Dim items in vendor menu that that player can't afford.
+	- Added 'enable_main2_activate' to menus/actionbar.txt config.
 
 * Sound
 	- Added 'soundfx_craft' and 'soundfx_craft_override' properties to Items.
