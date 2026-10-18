@@ -57,6 +57,7 @@ Engine features:
 	- Support saving and clearing the value of the --data-path command line flag with --save-data-path and --clear-data-path.
 	- Added --ignore-data-path command line flag for temporarily bypassing any saved data path.
 	- Better stand-alone game support through game.txt file. When used, user settings get stored in a game-specific directory, and the Mods configuration page is filtered to match the current game.
+	- Added 'min_fps' property to engine/misc.txt.
 
 Engine fixes:
 

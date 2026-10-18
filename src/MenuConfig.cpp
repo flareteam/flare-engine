@@ -394,14 +394,14 @@ MenuConfig::MenuConfig (bool _is_game_state)
 	auto_loot_lstb->append(msg->get("Only currency"), auto_loot_desc);
 
 	// set up the frame limits
-	frame_limits.push_back(30);
-	frame_limits.push_back(60);
-	frame_limits.push_back(120);
-	frame_limits.push_back(240);
+	if (eset->misc.min_fps <= 30) frame_limits.push_back(30);
+	if (eset->misc.min_fps <= 60) frame_limits.push_back(60);
+	if (eset->misc.min_fps <= 120) frame_limits.push_back(120);
+	if (eset->misc.min_fps <= 240) frame_limits.push_back(240);
 	if (std::find(frame_limits.begin(), frame_limits.end(), settings->max_frames_per_sec) == frame_limits.end())
 		frame_limits.push_back(settings->max_frames_per_sec);
 	unsigned short refresh_rate = render_device->getRefreshRate();
-	if (refresh_rate > 0 && std::find(frame_limits.begin(), frame_limits.end(), refresh_rate) == frame_limits.end())
+	if (refresh_rate > 0 && eset->misc.min_fps <= refresh_rate && std::find(frame_limits.begin(), frame_limits.end(), refresh_rate) == frame_limits.end())
 		frame_limits.push_back(refresh_rate);
 
 	std::sort(frame_limits.begin(), frame_limits.end());

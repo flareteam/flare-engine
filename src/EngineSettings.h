@@ -77,6 +77,7 @@ public:
 		bool passive_trigger_effect_stacking;
 		uint8_t fade_wall_alpha;
 		float raycast_resolution;
+		unsigned short min_fps;
 	};
 
 	class Resolutions {

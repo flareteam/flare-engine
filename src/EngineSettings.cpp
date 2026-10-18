@@ -95,6 +95,7 @@ void EngineSettings::Misc::load() {
 	passive_trigger_effect_stacking = false;
 	fade_wall_alpha = 63;
 	raycast_resolution = 0.1f;
+	min_fps = 0;
 
 	FileParser infile;
 	// @CLASS EngineSettings: Misc|Description of engine/misc.txt
@@ -224,6 +225,14 @@ void EngineSettings::Misc::load() {
 				if (raycast_resolution <= 0) {
 					raycast_resolution = 0.1f;
 					infile.error("EngineSettings: raycast_resolution must be greater than 0.");
+				}
+			}
+
+			// @ATTR min_fps|int|Sets the minimum frame limit that can be selected in the Video options. It will not change the player's saved max_fps setting if it is lower. If set to 0, this property will be ignored.
+			else if (infile.key == "min_fps") {
+				min_fps = static_cast<unsigned short>(std::max(0, Parse::toInt(infile.val)));
+				if (min_fps > 60) {
+					infile.error("EngineSettings: min_fps set to a value greater than 60. This is not recommended!");
 				}
 			}
 
