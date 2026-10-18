@@ -74,6 +74,7 @@ Engine fixes:
 	- Enemy/ally power chance is now a float, just like chance_pursue and chance_flee.
 	- Fixed a bug where uninitalized memory could cause HP regen to behave incorrectly.
 	- Fixed bug where entities could get stuck in "joining combat" state.
+	- Fixed animation hold timer being infinitely reset when the caster is already in a held animation.
 
 * Powers
 	- Fixed repeater powers not respecting the 'starting_pos' property.

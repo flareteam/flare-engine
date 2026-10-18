@@ -970,7 +970,7 @@ void Avatar::beginPower(PowerID replaced_id, FPoint* target) {
 		stats.direction = Utils::calcDirection(stats.pos.x, stats.pos.y, target->x, target->y);
 	}
 
-	if (power->state_duration > 0)
+	if (power->state_duration > 0 && !stats.hold_state)
 		stats.state_timer.setDuration(power->state_duration);
 
 	if (power->charge_speed != 0.0f) {

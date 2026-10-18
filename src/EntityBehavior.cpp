@@ -821,7 +821,7 @@ void EntityBehavior::updateState() {
 				e->activeAnimation->setSpeed(attack_speed);
 				e->playAttackSound(epower->attack_anim);
 
-				if (epower->state_duration > 0)
+				if (epower->state_duration > 0 && !e->stats.hold_state)
 					e->stats.state_timer.setDuration(epower->state_duration);
 
 				if (epower->charge_speed != 0.0f) {
