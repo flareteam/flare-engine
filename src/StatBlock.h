@@ -137,6 +137,8 @@ public:
 
 	void checkGFXPaths();
 
+	void chargeMove();
+
 	bool alive;
 	bool corpse; // creature is dead and done animating
 	bool corpse_has_collision;

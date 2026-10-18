@@ -75,6 +75,7 @@ Engine fixes:
 	- Fixed a bug where uninitalized memory could cause HP regen to behave incorrectly.
 	- Fixed bug where entities could get stuck in "joining combat" state.
 	- Fixed animation hold timer being infinitely reset when the caster is already in a held animation.
+	- Fix enemy charge attacks being 1 frame shorter than they should be.
 
 * Powers
 	- Fixed repeater powers not respecting the 'starting_pos' property.

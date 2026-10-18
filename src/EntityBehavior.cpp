@@ -827,6 +827,11 @@ void EntityBehavior::updateState() {
 				if (epower->charge_speed != 0.0f) {
 					e->stats.charge_speed = epower->charge_speed;
 
+					// For a reason I'm not clear of as I'm writing this, enemy charges miss 1 frame.
+					// So we compensate here by doing a move as we initialize the charge.
+					// Are we sure this isn't double-charging on the first frame? Maybe it should happen at the end of the charge...
+					e->stats.chargeMove();
+
 					if (epower->charge_duration > 0) {
 						e->stats.charge_timer.setDuration(epower->charge_duration);
 					}

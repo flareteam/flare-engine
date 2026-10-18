@@ -1289,13 +1289,7 @@ void StatBlock::logic() {
 		mapr->collider.block(pos.x, pos.y, hero_ally);
 	}
 	else if (charge_speed != 0.0f) {
-		float tmp_speed = charge_speed * SPEED_MULTIPLIER[direction];
-		float dx = tmp_speed * DIRECTION_DELTA_X[direction];
-		float dy = tmp_speed * DIRECTION_DELTA_Y[direction];
-
-		mapr->collider.unblock(pos.x, pos.y);
-		mapr->collider.move(pos.x, pos.y, dx, dy, movement_type, mapr->collider.getCollideType(hero));
-		mapr->collider.block(pos.x, pos.y, hero_ally);
+		chargeMove();
 	}
 
 	// check for revive
@@ -1676,3 +1670,12 @@ void StatBlock::checkGFXPaths() {
 	}
 }
 
+void StatBlock::chargeMove() {
+	float tmp_speed = charge_speed * SPEED_MULTIPLIER[direction];
+	float dx = tmp_speed * DIRECTION_DELTA_X[direction];
+	float dy = tmp_speed * DIRECTION_DELTA_Y[direction];
+
+	mapr->collider.unblock(pos.x, pos.y);
+	mapr->collider.move(pos.x, pos.y, dx, dy, movement_type, mapr->collider.getCollideType(hero));
+	mapr->collider.block(pos.x, pos.y, hero_ally);
+}
