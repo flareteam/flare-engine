@@ -550,7 +550,8 @@ void PowerManager::loadPowers() {
 			if (!check_pair) {
 				item_stack.item = items->verifyID(item_stack.item, &infile, !ItemManager::VERIFY_ALLOW_ZERO, !ItemManager::VERIFY_ALLOCATE);
 				if (item_stack.item > 0) {
-					item_stack.quantity = Parse::toInt(Parse::popFirstString(infile.val), 1);
+					// default quantity should be zero! (i.e. equipped item won't be removed)
+					item_stack.quantity = Parse::toInt(Parse::popFirstString(infile.val), 0);
 				}
 			}
 
