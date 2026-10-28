@@ -656,23 +656,11 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "requires_status") {
 		// @ATTR enemygroup.requires_status|list(string)|Statuses required to be set for enemy group to load
-		std::string s;
-		while ( (s = Parse::popFirstString(infile.val)) != "") {
-			EventComponent ec;
-			ec.type = EventComponent::REQUIRES_STATUS;
-			ec.status = camp->registerStatus(s);
-			group->requirements.push_back(ec);
-		}
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_STATUS, group->requirements);
 	}
 	else if (infile.key == "requires_not_status") {
 		// @ATTR enemygroup.requires_not_status|list(string)|Statuses required to be unset for enemy group to load
-		std::string s;
-		while ( (s = Parse::popFirstString(infile.val)) != "") {
-			EventComponent ec;
-			ec.type = EventComponent::REQUIRES_NOT_STATUS;
-			ec.status = camp->registerStatus(s);
-			group->requirements.push_back(ec);
-		}
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_NOT_STATUS, group->requirements);
 	}
 	else if (infile.key == "requires_level") {
 		// @ATTR enemygroup.requires_level|int|Player level must be equal or greater to load enemy group
@@ -742,23 +730,11 @@ void Map::loadEnemyGroup(FileParser &infile, Map_Group *group) {
 	}
 	else if (infile.key == "invincible_requires_status") {
 		// @ATTR enemygroup.invincible_requires_status|list(string)|Enemies in this group are invincible to hero attacks when these statuses are set.
-		std::string s;
-		while ((s = Parse::popFirstString(infile.val)) != "") {
-			EventComponent ec;
-			ec.type = EventComponent::REQUIRES_STATUS;
-			ec.status = camp->registerStatus(s);
-			group->invincible_requirements.push_back(ec);
-		}
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_STATUS, group->invincible_requirements);
 	}
 	else if (infile.key == "invincible_requires_not_status") {
 		// @ATTR enemygroup.invincible_requires_not_status|list(string)|Enemies in this group are invincible to hero attacks when these statuses are not set.
-		std::string s;
-		while ((s = Parse::popFirstString(infile.val)) != "") {
-			EventComponent ec;
-			ec.type = EventComponent::REQUIRES_NOT_STATUS;
-			ec.status = camp->registerStatus(s);
-			group->invincible_requirements.push_back(ec);
-		}
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_NOT_STATUS, group->invincible_requirements);
 	}
 	else if (infile.key == "spawn_level") {
 		// @ATTR enemygroup.spawn_level|["default", "fixed", "source_level", "source_stat", "hero_level", "hero_stat"], float, predefined_string : Mode, Multiplier, Primary stat|The level of spawned creatures. The need for the last two parameters depends on the mode being used. The "default" mode will just use the entity's normal level and doesn't require any additional parameters. The "fixed" mode sets the multiplier as the enemy level. The level modes multiply with the target's level. The stat modes multiply by one of the target's primary stats. The stat is defined with the last parameter, which is simply the ID of the primary stat that should be used for scaling. Because the map has no level/stats of its own, the source modes use the hero's level/stats.
@@ -785,23 +761,11 @@ void Map::loadNPC(FileParser &infile) {
 	}
 	else if (infile.key == "requires_status") {
 		// @ATTR npc.requires_status|list(string)|Statuses required to be set for NPC load
-		std::string s;
-		while ( (s = Parse::popFirstString(infile.val)) != "") {
-			EventComponent ec;
-			ec.type = EventComponent::REQUIRES_STATUS;
-			ec.status = camp->registerStatus(s);
-			map_npcs.back().requirements.push_back(ec);
-		}
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_STATUS, map_npcs.back().requirements);
 	}
 	else if (infile.key == "requires_not_status") {
 		// @ATTR npc.requires_not_status|list(string)|Statuses required to be unset for NPC load
-		std::string s;
-		while ( (s = Parse::popFirstString(infile.val)) != "") {
-			EventComponent ec;
-			ec.type = EventComponent::REQUIRES_NOT_STATUS;
-			ec.status = camp->registerStatus(s);
-			map_npcs.back().requirements.push_back(ec);
-		}
+		camp->parseStatusList(infile.val, EventComponent::REQUIRES_NOT_STATUS, map_npcs.back().requirements);
 	}
 	else if (infile.key == "requires_level") {
 		// @ATTR npc.requires_level|int|Player level must be equal or greater to load NPC
