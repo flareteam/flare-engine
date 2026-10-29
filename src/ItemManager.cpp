@@ -346,6 +346,7 @@ Item::Item()
 	, no_stash(NO_STASH_NULL)
 	, loot_drops_max(-1)
 	, parent(0)
+	, stale_id(0)
 	, set(0)
 	, sfx_id(0)
 	, sfx_craft_id(0)
@@ -2098,6 +2099,8 @@ void ItemManager::loadExtendedItems(const std::string& filename) {
 	if (!infile.open(filename, !FileParser::MOD_FILE, FileParser::ERROR_NONE))
 		return;
 
+	ItemID extended_items_offset = std::max(items.size(), eset->loot.extended_items_offset);
+
 	ItemID id = 0;
 	Item* item = NULL;
 	bool id_line;
@@ -2106,10 +2109,12 @@ void ItemManager::loadExtendedItems(const std::string& filename) {
 			id_line = true;
 
 			ItemID item_id = Parse::toItemID(Parse::popFirstString(infile.val));
+			ItemID stale_id = item_id;
 
-			if (item_id < items.size() && items[item_id]) {
-				infile.error("ItemManager: Existing item with ID %zu found when loading extended items. Skipping.", item_id);
-				continue;
+			if (item_id < extended_items_offset || (item_id < items.size() && items[item_id] != NULL)) {
+				ItemID new_id = std::max(items.size(), eset->loot.extended_items_offset);
+				infile.error("ItemManager: Extended item ID %zu is not valid. Updating ID to %zu.", item_id, new_id);
+				item_id = new_id;
 			}
 
 			ItemID parent_id = verifyID(Parse::toItemID(Parse::popFirstString(infile.val)), &infile, !VERIFY_ALLOW_ZERO, !VERIFY_ALLOCATE);
@@ -2119,6 +2124,11 @@ void ItemManager::loadExtendedItems(const std::string& filename) {
 
 			id = allocateExtendedItem(item_id, parent_id);
 			item = items[item_id];
+
+			if (item_id != stale_id) {
+				item->stale_id = stale_id;
+				extended_stale_ids[stale_id] = item_id;
+			}
 		}
 		else {
 			id_line = false;

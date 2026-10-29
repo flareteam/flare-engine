@@ -272,6 +272,7 @@ public:
 	int loot_drops_max;
 
 	ItemID parent;
+	ItemID stale_id;
 	ItemSetID set;              // item can be attached to item set
 	SoundID sfx_id;
 	SoundID sfx_craft_id;
@@ -378,6 +379,8 @@ public:
 	std::vector<ItemType> item_types;
 	std::vector<ItemSet*> item_sets;
 	std::vector<ItemQuality> item_qualities;
+
+	std::map<ItemID, ItemID> extended_stale_ids;
 };
 
 bool compareItemStack(const ItemStack &stack1, const ItemStack &stack2);

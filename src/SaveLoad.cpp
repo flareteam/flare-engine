@@ -311,7 +311,14 @@ void SaveLoad::saveExtendedItems(bool save_storage_items) {
 				continue;
 
 			outfile << "[item]" << std::endl;
-			outfile << "id=" << i << "," << item->parent << std::endl;
+
+			if (item->is_foreign && item->stale_id > 0) {
+				outfile << "id=" << item->stale_id << "," << item->parent << std::endl;
+			}
+			else {
+				outfile << "id=" << i << "," << item->parent << std::endl;
+			}
+
 			outfile << "level=" << item->level << std::endl;
 
 			if (item->quality < items->item_qualities.size() && !items->item_qualities[item->quality].name.empty()) {

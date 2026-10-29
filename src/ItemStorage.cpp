@@ -65,6 +65,12 @@ void ItemStorage::setItems(const std::string& s) {
 	std::string item_list = s + ',';
 	for (int i=0; i<slot_number; i++) {
 		storage[i].item = items->verifyID(Parse::toItemID(Parse::popFirstString(item_list)), NULL, ItemManager::VERIFY_ALLOW_ZERO, ItemManager::VERIFY_ALLOCATE);
+
+		if (items->extended_stale_ids.find(storage[i].item) != items->extended_stale_ids.end() && items->extended_stale_ids[storage[i].item] != 0) {
+			ItemID new_id = items->extended_stale_ids[storage[i].item];
+			Utils::logInfo("ItemStorage: Item ID %zu has been marked stale. Replacing ID with %zu.", storage[i].item, new_id);
+			storage[i].item = new_id;
+		}
 	}
 }
 

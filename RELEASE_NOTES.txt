@@ -64,6 +64,7 @@ Engine fixes:
 
 * Items
 	- Support using 'active_frame' for loot animations to set when the loot is considered to be on the ground.
+	- Fixed potential loss of extended items if the extended item offset ID changed.
 
 * Enemies, allies, and NPCs
 	- Fixed turn delay not working when entity speed was 0. This was a potential divide-by-zero crash as well!
