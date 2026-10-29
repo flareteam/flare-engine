@@ -940,6 +940,13 @@ bool EventManager::executeEventInternal(Event &ev, bool skip_delay) {
 		ev.keep_after_trigger = ec_repeat->data[0].Bool;
 	}
 
+	// force repeating save_game events to have a cooldown of 2 seconds to prevent excessive save writing
+	EventComponent *ec_save_game = ev.getComponent(EventComponent::SAVE_GAME);
+	if (ec_save_game && ec_repeat && ec_repeat->data[0].Bool == true && ev.cooldown.getDuration() == 0) {
+		ev.cooldown.setDuration(settings->max_frames_per_sec * 2);
+		ev.cooldown.reset(Timer::END);
+	}
+
 	// Delay event execution
 	// When an event is delayed, we create a copy and push it to mapr->delayed_events.
 	// The original starts both the cooldown and delay timers.
