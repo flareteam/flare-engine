@@ -608,6 +608,13 @@ bool StatBlock::isNPCStat(FileParser *infile) {
 	else if (infile->key == "random_stock") return true;
 	else if (infile->key == "random_stock_count") return true;
 	else if (infile->key == "vox_intro") return true;
+	else if (infile->key == "craft_constant_stock") return true;
+	else if (infile->key == "craft_status_stock") return true;
+	else if (infile->key == "craft_random_stock") return true;
+	else if (infile->key == "craft_random_stock_count") return true;
+	else if (infile->key == "vendor_tab_enabled") return true;
+	else if (infile->key == "vendor_gamble_buy") return true;
+	else if (infile->key == "vendor_gamble_craft") return true;
 
 	return false;
 }
