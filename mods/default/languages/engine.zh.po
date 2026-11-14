@@ -26,12 +26,12 @@ msgstr ""
 
 #: ../../../src/Avatar.cpp:496
 msgid "Your health is low!"
-msgstr "您已奄奄一息！"
+msgstr "你已奄奄一息！"
 
 #: ../../../src/Avatar.cpp:526
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "恭喜，你达到了等级%d!"
+msgstr "恭喜，你达到了等级%d！"
 
 #: ../../../src/Avatar.cpp:528
 msgid "You may increase one or more attributes through the Character Menu."
@@ -67,22 +67,22 @@ msgstr "%s已移除。"
 #: ../../../src/CampaignManager.cpp:190
 #, c-format
 msgid "You receive %d %s."
-msgstr "你得到%d个%s。"
+msgstr "你获得%d%s。"
 
 #: ../../../src/CampaignManager.cpp:194
 #, c-format
 msgid "You receive %s x%d."
-msgstr "你收到%s x%d。"
+msgstr "你获得%s个%d。"
 
 #: ../../../src/CampaignManager.cpp:196
 #, c-format
 msgid "You receive %s."
-msgstr "你收到%s。"
+msgstr "你获得%s。"
 
 #: ../../../src/CampaignManager.cpp:221
 #, c-format
 msgid "You receive %d XP."
-msgstr "你得到%dXP。"
+msgstr "你获得%dXP。"
 
 #: ../../../src/CampaignManager.cpp:231
 msgid "HP restored."
@@ -169,7 +169,7 @@ msgstr "+%sMP"
 
 #: ../../../src/EventManager.cpp:1013
 msgid "Unknown destination"
-msgstr "无法进入"
+msgstr "未知目的地"
 
 #: ../../../src/GameState.cpp:39 ../../../src/GameState.cpp:60
 msgid "Loading..."
@@ -177,7 +177,7 @@ msgstr "载入中……"
 
 #: ../../../src/GameStateLoad.cpp:97
 msgid "Delete this save?"
-msgstr "确定删除存档？"
+msgstr "删除这个存档吗？"
 
 #: ../../../src/GameStateLoad.cpp:98 ../../../src/GameStateTitle.cpp:195
 #: ../../../src/MenuConfig.cpp:263
@@ -217,7 +217,7 @@ msgstr "私人"
 
 #: ../../../src/GameStateLoad.cpp:829 ../../../src/GameStateLoad.cpp:850
 msgid "Enable a story mod to continue"
-msgstr "启用故事模块以继续"
+msgstr "启用故事模组以继续"
 
 #: ../../../src/GameStateLoad.cpp:845
 msgid "Load Game"
@@ -229,18 +229,18 @@ msgstr "进入游戏世界……"
 
 #: ../../../src/GameStateLoad.cpp:970
 msgid "Loading saved game..."
-msgstr "载入游戏……"
+msgstr "载入游戏存档……"
 
 #: ../../../src/GameStateLoad.cpp:1003
 msgid "Invalid save"
-msgstr "保存无效"
+msgstr "无效存档"
 
 #: ../../../src/GameStateLoad.cpp:1027 ../../../src/ItemManager.cpp:1385
 #: ../../../src/MenuPowers.cpp:956 ../../../src/MenuPowers.cpp:1337
 #: ../../../src/MenuPowers.cpp:1817
 #, c-format
 msgid "Level %d"
-msgstr "等级 %d"
+msgstr "等级%d"
 
 #: ../../../src/GameStateLoad.cpp:1069
 msgid "#"
@@ -269,7 +269,7 @@ msgstr "输入名字"
 
 #: ../../../src/GameStateNew.cpp:108
 msgid "Permadeath?"
-msgstr "死亡后不可复活?"
+msgstr "死亡后不可复活？"
 
 #: ../../../src/GameStateNew.cpp:112
 msgid "Choose a Class"
@@ -293,11 +293,11 @@ msgstr "退出游戏"
 
 #: ../../../src/GameStateTitle.cpp:138
 msgid "Enable a core mod to continue"
-msgstr "开启核心模块以继续"
+msgstr "启用核心模组以继续"
 
 #: ../../../src/GameStateTitle.cpp:139 ../../../src/MenuConfig.cpp:443
 msgid "Mods"
-msgstr "模块"
+msgstr "模组"
 
 #: ../../../src/GameStateTitle.cpp:156 ../../../src/MenuConfig.cpp:486
 msgid "Language"
@@ -319,12 +319,12 @@ msgstr "未知物品"
 #: ../../../src/ItemManager.cpp:1274 ../../../src/MenuPowers.cpp:1118
 #, c-format
 msgid "%s%% Speed"
-msgstr "%s%%速度"
+msgstr "%s%% 速度"
 
 #: ../../../src/ItemManager.cpp:1278 ../../../src/MenuPowers.cpp:1121
 #, c-format
 msgid "%s%% Attack Speed"
-msgstr "%s%%攻击速度"
+msgstr "%s%% 攻击速度"
 
 #: ../../../src/ItemManager.cpp:1315
 #, c-format
@@ -354,13 +354,13 @@ msgstr "伤害吸收"
 #: ../../../src/MenuPowers.cpp:1327
 #, c-format
 msgid "Requires Level %d"
-msgstr "需要等级%d"
+msgstr "需要等级 %d"
 
 #: ../../../src/ItemManager.cpp:1485 ../../../src/MenuPowers.cpp:1316
 #: ../../../src/MenuPowers.cpp:1318
 #, c-format
 msgid "Requires %s %d"
-msgstr "需要%s %d"
+msgstr "需要 %s %d"
 
 #: ../../../src/ItemManager.cpp:1496
 #, c-format
@@ -375,7 +375,7 @@ msgstr "购买价格：%d %s"
 #: ../../../src/ItemManager.cpp:1519 ../../../src/ItemManager.cpp:1531
 #, c-format
 msgid "Buy Price: %d %s each"
-msgstr "购买单价：%d %s每个"
+msgstr "购买价格：%d %s每个"
 
 #: ../../../src/ItemManager.cpp:1539
 #, c-format
@@ -385,7 +385,7 @@ msgstr "出售价格：%d %s"
 #: ../../../src/ItemManager.cpp:1541
 #, c-format
 msgid "Sell Price: %d %s each"
-msgstr "出售单价：%d %s每个"
+msgstr "出售价格：%d %s每个"
 
 #: ../../../src/ItemManager.cpp:1552
 msgid "Set:"
@@ -556,7 +556,7 @@ msgstr "下一级：%lu"
 #: ../../../src/MenuCharacter.cpp:549 ../../../src/MenuCharacter.cpp:560
 #: ../../../src/MenuCharacter.cpp:574 ../../../src/MenuCharacter.cpp:586
 msgid "Related stats:"
-msgstr "相关的属性："
+msgstr "相关属性："
 
 #: ../../../src/MenuCharacter.cpp:611 ../../../src/MenuCharacter.cpp:615
 #, c-format
@@ -570,7 +570,7 @@ msgstr "每点%s增长%s。"
 
 #: ../../../src/MenuCharacter.cpp:719
 msgid "Reduces damage taken from attacks of this damage type."
-msgstr "减少来自此伤害类型的攻击造成的伤害。"
+msgstr "减少受到此类型攻击所造成的伤害。"
 
 #: ../../../src/MenuCharacter.cpp:771
 #, c-format
@@ -644,7 +644,7 @@ msgstr "总是显示战利品提示。按‘Alt’临时隐藏全部的战利品
 msgid ""
 "Always hide loot tooltips, except for when a piece of loot is hovered with "
 "the mouse cursor. Temporarily show all loot tooltips with 'Alt'."
-msgstr "总是隐藏战利品提示，除了光标指向的。按 ‘Alt’ 显示全部的战利品提示。"
+msgstr "总是隐藏战利品提示，只在光标悬停其上时提示。按‘Alt’显示全部的战利品提示。"
 
 #: ../../../src/MenuConfig.cpp:359
 msgid "Visible"
@@ -702,7 +702,7 @@ msgstr "光标"
 
 #: ../../../src/MenuConfig.cpp:376
 msgid "Sound"
-msgstr "音效"
+msgstr "声音"
 
 #: ../../../src/MenuConfig.cpp:382
 msgid ""
@@ -817,7 +817,7 @@ msgstr "在墙后显示玩家"
 
 #: ../../../src/MenuConfig.cpp:477
 msgid "Sound Volume"
-msgstr "游戏音乐音量"
+msgstr "游戏音效音量"
 
 #: ../../../src/MenuConfig.cpp:478
 msgid "Music Volume"
@@ -881,7 +881,7 @@ msgstr "显示战斗文字"
 
 #: ../../../src/MenuConfig.cpp:497
 msgid "Show item comparison tooltips"
-msgstr "显示物品比较工具栏"
+msgstr "显示物品对比提示"
 
 #: ../../../src/MenuConfig.cpp:498
 msgid "Pause game when window loses focus"
@@ -931,32 +931,32 @@ msgstr "触摸按钮尺寸"
 msgid ""
 "Will try to store surfaces in video memory versus system memory. The effect "
 "this has on performance depends on the renderer."
-msgstr "将尝试在视频内存中存储表面而不是系统内存。这对性能的影响取决于渲染器。"
+msgstr "将尝试在显存中存储表面而不是系统内存。这对性能的影响取决于渲染器。"
 
 #: ../../../src/MenuConfig.cpp:636
 msgid ""
 "Prevents screen tearing. Disable if you experience \"stuttering\" in "
 "windowed mode or input lag."
-msgstr "防止画面撕裂。如果在窗口模式或输入时“卡顿”则禁用。"
+msgstr "防止画面撕裂。如果在窗口模式下遇到卡顿或输入延迟，请禁用此选项。"
 
 #: ../../../src/MenuConfig.cpp:637
 msgid ""
 "When enabled, this uses the screen DPI in addition to the window dimensions "
 "to scale the rendering resolution. Otherwise, only the window dimensions are"
 " used."
-msgstr "启用后，除了窗口尺寸外，还会使用屏幕DPI来调整渲染分辨率。否则，只使用窗口尺寸。"
+msgstr "启用后，它将使用屏幕DPI以及窗口尺寸来缩放渲染分辨率。否则，只使用窗口尺寸。"
 
 #: ../../../src/MenuConfig.cpp:638
 msgid ""
 "This enables parallax (non-tile) layers. Disabling this setting can improve "
 "performance in some cases."
-msgstr "启用视差（非瓦片）层。 禁用此设置在一些情况下能提升性能。"
+msgstr "启用视差（非瓦片）层。禁用此设置在一些情况下能提升性能。"
 
 #: ../../../src/MenuConfig.cpp:639
 msgid ""
 "Use multiple CPU threads when loading some images. Try disabling this option"
 " if you experience instability during loading."
-msgstr "在加载某些图像时使用多个 CPU 线程。如果加载过程中遇到不稳定，请尝试禁用此选项。"
+msgstr "在加载某些图像时使用多个CPU线程。如果加载过程中遇到不稳定，请尝试禁用此选项。"
 
 #: ../../../src/MenuConfig.cpp:640
 msgid ""
@@ -968,7 +968,7 @@ msgstr "降低覆盖玩家的墙壁瓦片的透明度。禁用此选项可能会
 msgid ""
 "Provides additional text for information that is primarily conveyed through "
 "color."
-msgstr "为主要通过颜色传达的信息提供补充文字说明。"
+msgstr "为主要通过颜色传达的信息提供额外的文字说明。"
 
 #: ../../../src/MenuConfig.cpp:642
 msgid ""
@@ -980,19 +980,19 @@ msgstr "当状态栏闲置时，一些组件会自动隐藏它。禁用它以让
 msgid ""
 "When enabled, empty equipment slots will be filled with applicable items "
 "when they are obtained."
-msgstr "当开启时，获取适当的物品的时候空的装备栏将被填充。"
+msgstr "启用后，在获得装备时如有空槽则自动装备。"
 
 #: ../../../src/MenuConfig.cpp:644
 msgid ""
 "When enabled, tooltips for equipped items of the same type are shown next to"
 " standard item tooltips."
-msgstr "开启后，同种装备的工具栏将在起始工具栏旁显示。"
+msgstr "启用后，在同类装备旁显示已装备物品的信息。"
 
 #: ../../../src/MenuConfig.cpp:645
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
-msgstr "允许游戏完全被键盘（或摇杆）控制。"
+msgstr "允许游戏完全被键盘（或摇杆）所控制。"
 
 #: ../../../src/MenuConfig.cpp:646
 msgid ""
@@ -1013,21 +1013,21 @@ msgstr "当开启‘使用鼠标移动英雄’时，这设置分配到移动键
 msgid ""
 "The player's attacks will be aimed in the direction of the mouse cursor when"
 " this is enabled."
-msgstr "开启后玩家的攻击将指向光标。"
+msgstr "启用此选项时，玩家的攻击将瞄准光标所在的方向。"
 
 #: ../../../src/MenuConfig.cpp:649
 msgid ""
 "When enabled, a virtual gamepad will be added in-game. Other interactions, "
 "such as drag-and-drop behavior, are also altered to better suit touch input."
-msgstr "开启后，游戏中将会增加触摸按钮。其他如拖拽的操作，也将改变以适配触摸控制。"
+msgstr "启用后，游戏将会增加触摸按钮。其他如拖拽的操作，也将改变以适配触摸控制。"
 
 #: ../../../src/MenuConfig.cpp:782
 msgid "Active Mods"
-msgstr "激活模块"
+msgstr "激活模组"
 
 #: ../../../src/MenuConfig.cpp:791
 msgid "Available Mods"
-msgstr "可用模块"
+msgstr "可用模组"
 
 #: ../../../src/MenuConfig.cpp:810
 msgid "<< Disable"
@@ -1059,7 +1059,7 @@ msgstr "引擎版本号："
 
 #: ../../../src/MenuConfig.cpp:1826
 msgid "Requires mods:"
-msgstr "需要的模块："
+msgstr "需要模组："
 
 #: ../../../src/MenuConfig.cpp:1875
 msgid "Can not remove this binding."
@@ -1077,7 +1077,7 @@ msgstr "保存并退出"
 #: ../../../src/MenuDevConsole.cpp:202
 #, c-format
 msgid "Use '%s' to inspect with the cursor."
-msgstr "使用‘%s’使用光标检视"
+msgstr "使用‘%s’用光标进行检视"
 
 #: ../../../src/MenuDevConsole.cpp:207
 msgid "Arguments with spaces should be enclosed with double quotes. Example:"
@@ -1311,11 +1311,11 @@ msgstr "失去%s。"
 #: ../../../src/MenuInventory.cpp:453 ../../../src/MenuStash.cpp:308
 #, c-format
 msgid "%d %s"
-msgstr "%d个%s"
+msgstr "%d %s"
 
 #: ../../../src/MenuInventory.cpp:502
 msgid "Pick up item(s):"
-msgstr "捡起物品："
+msgstr "拾取物品："
 
 #: ../../../src/MenuInventory.cpp:503
 msgid "Use or equip item:"
@@ -1324,7 +1324,7 @@ msgstr "使用或装备物品："
 #: ../../../src/MenuInventory.cpp:504
 #, c-format
 msgid "%s modifiers"
-msgstr "%s 来调整"
+msgstr "%s 调整物品"
 
 #: ../../../src/MenuInventory.cpp:505
 msgid "Select a quantity of item:"
@@ -1332,23 +1332,23 @@ msgstr "选择物品的数量："
 
 #: ../../../src/MenuInventory.cpp:508
 msgid "Stash item stack:"
-msgstr "储物物品的栈："
+msgstr "储存物品："
 
 #: ../../../src/MenuInventory.cpp:510
 msgid "Sell item stack:"
-msgstr "卖出物品的栈："
+msgstr "卖出物品："
 
 #: ../../../src/MenuInventory.cpp:788
 msgid "You don't have enough of the required item."
-msgstr "你没有足够的需要的物品。"
+msgstr "你没有足够的所需物品。"
 
 #: ../../../src/MenuInventory.cpp:800
 msgid "You can't use this item right now."
-msgstr "你无法立刻使用这个物品。"
+msgstr "你现在不能使用此物品。"
 
 #: ../../../src/MenuInventory.cpp:825
 msgid "This item can only be used from the action bar."
-msgstr "此物品只能从动作槽使用。"
+msgstr "此物品只能从动作栏使用。"
 
 #: ../../../src/MenuInventory.cpp:946
 msgid "Inventory is full."
@@ -1427,7 +1427,7 @@ msgstr "买入"
 
 #: ../../../src/MenuNumPicker.cpp:59
 msgid "Enter amount:"
-msgstr "输入数目："
+msgstr "输入数量："
 
 #: ../../../src/MenuPowers.cpp:968
 msgid "Passive"
@@ -1449,15 +1449,15 @@ msgstr "冷却："
 
 #: ../../../src/MenuPowers.cpp:1097 ../../../src/MenuPowers.cpp:1100
 msgid "Damage per second"
-msgstr "每秒伤害："
+msgstr "伤害每秒"
 
 #: ../../../src/MenuPowers.cpp:1103 ../../../src/MenuPowers.cpp:1106
 msgid "HP per second"
-msgstr "每秒HP"
+msgstr "HP每秒"
 
 #: ../../../src/MenuPowers.cpp:1109 ../../../src/MenuPowers.cpp:1112
 msgid "MP per second"
-msgstr "每秒MP"
+msgstr "MP每秒"
 
 #: ../../../src/MenuPowers.cpp:1116
 msgid "Immobilize"
@@ -1465,15 +1465,15 @@ msgstr "定身"
 
 #: ../../../src/MenuPowers.cpp:1124
 msgid "Resist All Negative Effects"
-msgstr "免疫所有负面效果"
+msgstr "抵抗所有负面效果"
 
 #: ../../../src/MenuPowers.cpp:1128
 msgid "Stun"
-msgstr "击晕"
+msgstr "眩晕"
 
 #: ../../../src/MenuPowers.cpp:1131
 msgid "Automatic revive on death"
-msgstr "死亡自动复活"
+msgstr "死亡后自动复活"
 
 #: ../../../src/MenuPowers.cpp:1134
 msgid "Convert"
@@ -1502,7 +1502,7 @@ msgstr "击退"
 #: ../../../src/MenuPowers.cpp:1220
 #, c-format
 msgid "%s%% chance"
-msgstr "%s%%几率"
+msgstr "%s%% 几率"
 
 #: ../../../src/MenuPowers.cpp:1244
 msgid "Base Accuracy"
@@ -1510,7 +1510,7 @@ msgstr "基础精准度"
 
 #: ../../../src/MenuPowers.cpp:1264
 msgid "Base Critical Chance"
-msgstr "基础致命一击几率"
+msgstr "基础暴击几率"
 
 #: ../../../src/MenuPowers.cpp:1272
 msgid "Ignores Absorption"
@@ -1523,7 +1523,7 @@ msgstr "无视闪避"
 #: ../../../src/MenuPowers.cpp:1282
 #, c-format
 msgid "%s%% Chance to crit slowed targets"
-msgstr "%s%%几率重击减慢的敌人"
+msgstr "%s%% 几率暴击减速的敌人"
 
 #: ../../../src/MenuPowers.cpp:1287
 #, c-format
@@ -1594,7 +1594,7 @@ msgstr "储物柜已满。"
 #: ../../../src/MenuStash.cpp:458
 #, c-format
 msgid "Can not store item in stash: %s"
-msgstr "无法在储物柜中存放物品 %s"
+msgstr "不能将物品存入储物柜：%s"
 
 #: ../../../src/MenuStatBar.cpp:182
 #, c-format
@@ -1642,7 +1642,7 @@ msgstr "游戏已保存。"
 #: ../../../src/SDLInputState.cpp:98
 #, c-format
 msgid "Can not bind: %s"
-msgstr "无法绑定 %s"
+msgstr "无法绑定：%s"
 
 #: ../../../src/SDLInputState.cpp:107
 #, c-format
@@ -1738,7 +1738,7 @@ msgstr "右Shift"
 
 #: ../../../src/SDLInputState.cpp:694
 msgid "SLock"
-msgstr "ScrLock"
+msgstr "SLock"
 
 #: ../../../src/SDLInputState.cpp:695
 msgid "Spc"
@@ -1767,7 +1767,7 @@ msgstr "删除键"
 
 #: ../../../src/SDLInputState.cpp:707
 msgid "Escape"
-msgstr "ESC"
+msgstr "Escape"
 
 #: ../../../src/SDLInputState.cpp:709
 msgid "Insert"
@@ -2165,11 +2165,11 @@ msgstr "闪避等级。敌人的精准度等级减去这个值计算为敌人直
 
 #: ../../../src/Stats.cpp:82 ../../../src/Stats.cpp:89
 msgid "Reduces the amount of damage taken."
-msgstr "减少受到的伤害数量。"
+msgstr "减少受到的伤害量。"
 
 #: ../../../src/Stats.cpp:95
 msgid "Critical Hit Chance"
-msgstr "致命一击几率"
+msgstr "暴击几率"
 
 #: ../../../src/Stats.cpp:96
 msgid "Chance for an attack to do extra damage."
@@ -2191,7 +2191,7 @@ msgstr "奖励%s"
 #: ../../../src/Stats.cpp:110
 #, c-format
 msgid "Increases the %s found per drop."
-msgstr "每次掉落增加%s。"
+msgstr "增加每次掉落的%s数量。"
 
 #: ../../../src/Stats.cpp:116
 msgid "Item Find Chance"
@@ -2207,7 +2207,7 @@ msgstr "潜行"
 
 #: ../../../src/Stats.cpp:124
 msgid "Increases your ability to move undetected."
-msgstr "增加你不被发现地移动的能力。"
+msgstr "增加你潜行移动的能力。"
 
 #: ../../../src/Stats.cpp:130
 msgid "Poise"
@@ -2231,23 +2231,23 @@ msgstr "伤害反弹"
 
 #: ../../../src/Stats.cpp:145
 msgid "Deals a percentage of damage taken back to the attacker."
-msgstr "返回给攻击者一定比例的伤害。"
+msgstr "将受到的伤害按百分比返还给攻击者。"
 
 #: ../../../src/Stats.cpp:151
 msgid "HP Steal"
-msgstr "HP偷取"
+msgstr "HP窃取"
 
 #: ../../../src/Stats.cpp:152
 msgid "Percentage of HP stolen per hit."
-msgstr "每次击中偷取的MP百分比。"
+msgstr "每次命中时窃取的HP百分比。"
 
 #: ../../../src/Stats.cpp:158
 msgid "MP Steal"
-msgstr "MP偷取"
+msgstr "MP窃取"
 
 #: ../../../src/Stats.cpp:159
 msgid "Percentage of MP stolen per hit."
-msgstr "每次击中偷取的MP百分比。"
+msgstr "每次命中时窃取的MP百分比。"
 
 #: ../../../src/Stats.cpp:165
 msgid "Resist Damage-Over-Time"
@@ -2283,11 +2283,11 @@ msgstr "击退效果被抵消的百分比几率。"
 
 #: ../../../src/Stats.cpp:193
 msgid "Resist Stat Debuffs"
-msgstr "抵抗属性减益"
+msgstr "抵抗负面效果"
 
 #: ../../../src/Stats.cpp:194
 msgid "Percentage chance that stat debuff effects will be negated."
-msgstr "属性减益效果被抵消的百分比几率。"
+msgstr "负面效果被抵消的百分比几率。"
 
 #: ../../../src/Stats.cpp:200
 msgid "Resist Damage Reflection"

@@ -120,6 +120,7 @@ Translation updates:
 * Finnish (fi) update (Jaakko Muilu)
 * Portuguese (Brazilian) (pt_BR) update (João Francisco Gauze Carrer)
 * Russian (ru) update (berry)
+* Swedish (sv) update (Daniel Nylander)
 * Turkish (tr) by Fatih Polat
 * Chinese (Taiwan) (zh_TW) update (Li Yang)
 

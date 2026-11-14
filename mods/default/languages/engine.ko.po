@@ -6,7 +6,7 @@
 # Translators:
 # bnk159hair <bnk159hair@naver.com>, 2020
 # YooJin919, 2022
-# ks k, 2022
+# ks k, 2026
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-23 12:01-0400\n"
 "PO-Revision-Date: 2018-03-28 19:16+0000\n"
-"Last-Translator: ks k, 2022\n"
+"Last-Translator: ks k, 2026\n"
 "Language-Team: Korean (https://app.transifex.com/flareorg/teams/84925/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +30,7 @@ msgstr "체력이 낮습니다!"
 #: ../../../src/Avatar.cpp:526
 #, c-format
 msgid "Congratulations, you have reached level %d!"
-msgstr "축하합니다. 레벨이 %d로 올랐습니다!"
+msgstr "축하합니다. 레벨이 %d(으)로 올랐습니다!"
 
 #: ../../../src/Avatar.cpp:528
 msgid "You may increase one or more attributes through the Character Menu."
@@ -138,17 +138,17 @@ msgstr "모험가"
 #: ../../../src/EngineSettings.cpp:881 ../../../src/Stats.cpp:81
 #, c-format
 msgid "%s (Min.)"
-msgstr ""
+msgstr "%s (최소.)"
 
 #: ../../../src/EngineSettings.cpp:884 ../../../src/Stats.cpp:88
 #, c-format
 msgid "%s (Max.)"
-msgstr ""
+msgstr "%s (최대.)"
 
 #: ../../../src/EngineSettings.cpp:887
 #, c-format
 msgid "Resist Damage (%s)"
-msgstr ""
+msgstr "저항 피해 (%s)"
 
 #: ../../../src/Entity.cpp:520
 msgid "miss"
@@ -304,7 +304,7 @@ msgstr "언어"
 
 #: ../../../src/GameStateTitle.cpp:194
 msgid "Use mouse to move player?"
-msgstr ""
+msgstr "마우스로 플레이어를 이동시킬까요?"
 
 #: ../../../src/GameSwitcher.cpp:263
 #, c-format
@@ -323,7 +323,7 @@ msgstr "%s%% 속도"
 #: ../../../src/ItemManager.cpp:1278 ../../../src/MenuPowers.cpp:1121
 #, c-format
 msgid "%s%% Attack Speed"
-msgstr "공격속도 %s%%"
+msgstr "공격 속도 %s%%"
 
 #: ../../../src/ItemManager.cpp:1315
 #, c-format
@@ -337,7 +337,7 @@ msgstr "퀘스트 아이템"
 #: ../../../src/ItemManager.cpp:1398
 #, c-format
 msgid "Prevents use of slot: %s"
-msgstr ""
+msgstr "슬롯 사용 불가: %s"
 
 #: ../../../src/ItemManager.cpp:1406
 #, c-format
@@ -359,7 +359,7 @@ msgstr "필요 레벨: %d"
 #: ../../../src/MenuPowers.cpp:1318
 #, c-format
 msgid "Requires %s %d"
-msgstr ""
+msgstr "%s %d (이)가 필요"
 
 #: ../../../src/ItemManager.cpp:1496
 #, c-format
@@ -411,19 +411,19 @@ msgstr "더 많은 옵션을 위해 [%s]을/를 선택하세요"
 
 #: ../../../src/ItemStorage.cpp:483
 msgid "Sort by: Type"
-msgstr ""
+msgstr "정렬 기준: 유형"
 
 #: ../../../src/ItemStorage.cpp:485
 msgid "Sort by: Quality"
-msgstr ""
+msgstr "정렬 기준: 품질"
 
 #: ../../../src/ItemStorage.cpp:487
 msgid "Sort by: Level"
-msgstr ""
+msgstr "정렬 기준: 레벨"
 
 #: ../../../src/ItemStorage.cpp:489
 msgid "Sort by: Sell Price"
-msgstr ""
+msgstr "정렬 기준: 판매 가격"
 
 #: ../../../src/LootManager.cpp:107 ../../../src/LootManager.cpp:109
 #: ../../../src/LootManager.cpp:111 ../../../src/MenuConfig.cpp:492
@@ -446,11 +446,11 @@ msgstr "전체 보기"
 
 #: ../../../src/MapRenderer.cpp:1766
 msgid "Map Legend"
-msgstr ""
+msgstr "지도 범례"
 
 #: ../../../src/MapRenderer.cpp:1767
 msgid "Start"
-msgstr ""
+msgstr "시작`"
 
 #: ../../../src/MapRenderer.cpp:1768 ../../../src/SDLInputState.cpp:676
 #: ../../../src/SDLInputState.cpp:706
@@ -459,11 +459,11 @@ msgstr "엔드"
 
 #: ../../../src/MapRenderer.cpp:1769
 msgid "Door"
-msgstr ""
+msgstr "문"
 
 #: ../../../src/MapRenderer.cpp:1770
 msgid "Key"
-msgstr ""
+msgstr "열쇠"
 
 #: ../../../src/MenuActionBar.cpp:92 ../../../src/MenuCharacter.cpp:54
 #: ../../../src/SDLInputState.cpp:930
@@ -514,11 +514,11 @@ msgstr "필요한 스텟 포인트: %d"
 
 #: ../../../src/MenuCharacter.cpp:326
 msgid "Core Stats"
-msgstr ""
+msgstr "기본 능력치들"
 
 #: ../../../src/MenuCharacter.cpp:360
 msgid "Offensive Stats"
-msgstr ""
+msgstr "공격 능력치들"
 
 #: ../../../src/MenuCharacter.cpp:375
 #, c-format
@@ -527,19 +527,19 @@ msgstr "기본 데미지 (%s)"
 
 #: ../../../src/MenuCharacter.cpp:409
 msgid "Defensive Stats"
-msgstr ""
+msgstr "방어 능력치들"
 
 #: ../../../src/MenuCharacter.cpp:458
 msgid "Miscellaneous Stats"
-msgstr ""
+msgstr "기타 능력치들"
 
 #: ../../../src/MenuCharacter.cpp:478
 msgid "Movement Speed"
-msgstr ""
+msgstr "이동 속도"
 
 #: ../../../src/MenuCharacter.cpp:485
 msgid "Attack Speed"
-msgstr ""
+msgstr "공격 속도"
 
 #: ../../../src/MenuCharacter.cpp:496 ../../../src/MenuStatBar.cpp:179
 #, c-format
@@ -569,7 +569,7 @@ msgstr "%s의 각 점에 대해 %s이(가) 부여됩니다."
 
 #: ../../../src/MenuCharacter.cpp:719
 msgid "Reduces damage taken from attacks of this damage type."
-msgstr ""
+msgstr "이 피해 유형의 공격으로부터 받는 피해를 줄입니다."
 
 #: ../../../src/MenuCharacter.cpp:771
 #, c-format
@@ -577,6 +577,8 @@ msgid ""
 "Upgrade Stat: %s\n"
 "Uses 1 Stat Point"
 msgstr ""
+"능력치 강화: %s\n"
+"능력치 포인트 1개를 사용"
 
 #: ../../../src/MenuConfig.cpp:258 ../../../src/MenuConfig.cpp:1476
 msgid "Assign:"
@@ -612,15 +614,15 @@ msgstr "게임을 저장"
 
 #: ../../../src/MenuConfig.cpp:333
 msgid "<unknown>"
-msgstr ""
+msgstr "<unknown>"
 
 #: ../../../src/MenuConfig.cpp:336
 msgid "All Mods"
-msgstr ""
+msgstr "모든 모드들"
 
 #: ../../../src/MenuConfig.cpp:337
 msgid "All Core Mods"
-msgstr ""
+msgstr "모든 핵심 모드들"
 
 #: ../../../src/MenuConfig.cpp:354
 msgid ""
@@ -714,15 +716,15 @@ msgstr "플레이어의 체력이 주어진 임계값보다 낮을 때, 하나 �
 #: ../../../src/MenuConfig.cpp:386
 msgid ""
 "When enabled, eligible loot will be picked up automatically when nearby."
-msgstr ""
+msgstr "활성화하면, 근처에 있는 획득 가능한 전리품들을 자동으로 주웁니다."
 
 #: ../../../src/MenuConfig.cpp:388
 msgid "Enabled"
-msgstr ""
+msgstr "활성화"
 
 #: ../../../src/MenuConfig.cpp:389
 msgid "Only currency"
-msgstr ""
+msgstr "통화만"
 
 #: ../../../src/MenuConfig.cpp:406
 msgid "The maximum frame rate that the game will be allowed to run at."
@@ -752,7 +754,7 @@ msgstr "음성"
 
 #: ../../../src/MenuConfig.cpp:439
 msgid "Game"
-msgstr ""
+msgstr "게임"
 
 #: ../../../src/MenuConfig.cpp:440
 msgid "Interface"
@@ -812,11 +814,11 @@ msgstr "프레임 제한"
 
 #: ../../../src/MenuConfig.cpp:474
 msgid "Threaded Image Loading"
-msgstr ""
+msgstr "스레드 이미지 불러오는 중"
 
 #: ../../../src/MenuConfig.cpp:475
 msgid "Show player behind walls"
-msgstr ""
+msgstr "벽 뒤의 플레이어를 표시"
 
 #: ../../../src/MenuConfig.cpp:477
 msgid "Sound Volume"
@@ -828,7 +830,7 @@ msgstr "음악 볼륨"
 
 #: ../../../src/MenuConfig.cpp:479
 msgid "Mute audio when window loses focus"
-msgstr ""
+msgstr "창이 포커스를 잃었을 때 오디오를 음소거"
 
 #: ../../../src/MenuConfig.cpp:481
 msgid "Automatically equip items"
@@ -836,7 +838,7 @@ msgstr "아이템 자동 장착"
 
 #: ../../../src/MenuConfig.cpp:482
 msgid "Automatically pick up loot"
-msgstr ""
+msgstr "전리품들을 자동 획득"
 
 #: ../../../src/MenuConfig.cpp:483
 msgid "Low health notification"
@@ -852,7 +854,7 @@ msgstr "FPS 표시"
 
 #: ../../../src/MenuConfig.cpp:488
 msgid "Use system mouse cursor"
-msgstr ""
+msgstr "시스템 마우스 커서를 사용"
 
 #: ../../../src/MenuConfig.cpp:489
 msgid "Colorblind Mode"
@@ -888,7 +890,7 @@ msgstr "아이템 비교 풍선 도움말을 표시"
 
 #: ../../../src/MenuConfig.cpp:498
 msgid "Pause game when window loses focus"
-msgstr ""
+msgstr "창이 포커스를 잃었을 때 게임을 일시 정지"
 
 #: ../../../src/MenuConfig.cpp:501
 msgid "Joystick"
@@ -920,7 +922,7 @@ msgstr "조이스틱 데드존"
 
 #: ../../../src/MenuConfig.cpp:508
 msgid "Joystick Rumble"
-msgstr ""
+msgstr "조이스틱 진동"
 
 #: ../../../src/MenuConfig.cpp:509
 msgid "Touch Controls"
@@ -961,12 +963,13 @@ msgid ""
 "Use multiple CPU threads when loading some images. Try disabling this option"
 " if you experience instability during loading."
 msgstr ""
+"일부 이미지를 불러올 때 여러 개의 CPU 스레드들을 사용합니다. 불러오기 중에 불안정 현상이 발생하면 이 옵션을 비활성화해 보세요."
 
 #: ../../../src/MenuConfig.cpp:640
 msgid ""
 "Lowers the opacity of wall tiles that are covering the player. Disabling "
 "this option may improve performace in some circumstances."
-msgstr ""
+msgstr "플레이어를 가리고 있는 벽 타일들의 불투명도를 낮춥니다. 이 옵션을 비활성화하면 일부 상황에서 성능이 향상될 수 있습니다."
 
 #: ../../../src/MenuConfig.cpp:641
 msgid ""
@@ -1053,7 +1056,7 @@ msgstr "바인딩;"
 
 #: ../../../src/MenuConfig.cpp:1795
 msgid "Core mod"
-msgstr ""
+msgstr "핵심 모드"
 
 #: ../../../src/MenuConfig.cpp:1808
 msgid "Version:"
@@ -1124,7 +1127,7 @@ msgstr "벽"
 
 #: ../../../src/MenuDevConsole.cpp:336 ../../../src/MenuDevConsole.cpp:338
 msgid "short wall / pit"
-msgstr ""
+msgstr "낮은 벽 / 구덩이"
 
 #: ../../../src/MenuDevConsole.cpp:339
 msgid "entity"
@@ -1132,7 +1135,7 @@ msgstr "개체"
 
 #: ../../../src/MenuDevConsole.cpp:340
 msgid "entity, ally"
-msgstr ""
+msgstr "개체, 아군들"
 
 #: ../../../src/MenuDevConsole.cpp:347
 msgid "Tile"
@@ -1140,11 +1143,11 @@ msgstr "타일"
 
 #: ../../../src/MenuDevConsole.cpp:449
 msgid "Shortcut saved."
-msgstr ""
+msgstr "단축키가 저장되었습니다."
 
 #: ../../../src/MenuDevConsole.cpp:476
 msgid "For procedural maps, prints a color-coded map."
-msgstr ""
+msgstr "절차적 생성 지도들의 경우, 색상 코드로 구분된 맵을 출력합니다."
 
 #: ../../../src/MenuDevConsole.cpp:477
 msgid "adds a power to the action bar"
@@ -1186,7 +1189,7 @@ msgstr "검색어와 일치하는 아이템 목록을 출력합니다. 검색어
 
 #: ../../../src/MenuDevConsole.cpp:485
 msgid "Assign a console command to a shortcut key."
-msgstr ""
+msgstr "단축키에 콘솔 명령어를 할당합니다."
 
 #: ../../../src/MenuDevConsole.cpp:486 ../../../src/MenuDevConsole.cpp:487
 msgid ""
@@ -1229,36 +1232,36 @@ msgstr "<id>"
 #: ../../../src/MenuDevConsole.cpp:664
 #, c-format
 msgid "3 | <%s> | %s"
-msgstr ""
+msgstr "3 | <%s> | %s"
 
 #: ../../../src/MenuDevConsole.cpp:665
 #, c-format
 msgid "2 | <%s> | %s"
-msgstr ""
+msgstr "2 | <%s> | %s"
 
 #: ../../../src/MenuDevConsole.cpp:666
 #, c-format
 msgid "1 | <%s> | %s"
-msgstr ""
+msgstr "1 | <%s> | %s"
 
 #: ../../../src/MenuDevConsole.cpp:667
 msgid "Current shortcuts:"
-msgstr ""
+msgstr "현재 단축키들:"
 
 #: ../../../src/MenuDevConsole.cpp:676
 #, c-format
 msgid "Enter the command you wish to save to slot %d."
-msgstr ""
+msgstr "슬롯 %d 에 저장할 명령어를 입력하세요."
 
 #: ../../../src/MenuDevConsole.cpp:680
 msgid "ERROR: Not a valid shortcut slot."
-msgstr ""
+msgstr "오류: 유효한 단축키 슬롯이 아닙니다."
 
 #: ../../../src/MenuDevConsole.cpp:686
 msgid ""
 "Procedural chunk maps are only available for generated maps. This map is "
 "either not a procedural map, or the chunk data is corrupt."
-msgstr ""
+msgstr "절차적 청크 지도들은 생성된 지도들에서만 사용 가능합니다. 이 지도는 절차적 지도가 아니거나 청크 데이터가 손상되었습니다."
 
 #: ../../../src/MenuDevConsole.cpp:703
 #, c-format
@@ -1425,7 +1428,7 @@ msgstr "이동하기"
 
 #: ../../../src/MenuManager.cpp:1949
 msgid "Add to bar"
-msgstr ""
+msgstr "막대에 추가"
 
 #: ../../../src/MenuManager.cpp:1954
 msgid "Drop"
@@ -1475,7 +1478,7 @@ msgstr "고정"
 
 #: ../../../src/MenuPowers.cpp:1124
 msgid "Resist All Negative Effects"
-msgstr ""
+msgstr "모든 부정적 효과 저항들"
 
 #: ../../../src/MenuPowers.cpp:1128
 msgid "Stun"
@@ -1524,7 +1527,7 @@ msgstr "기본 치명타 확률"
 
 #: ../../../src/MenuPowers.cpp:1272
 msgid "Ignores Absorption"
-msgstr ""
+msgstr "흡수를 무시"
 
 #: ../../../src/MenuPowers.cpp:1277
 msgid "Ignores Avoidance"
@@ -1538,12 +1541,12 @@ msgstr "%s%% 확률로 느려진 목표물에 치명타를 가할 수 있는 기
 #: ../../../src/MenuPowers.cpp:1287
 #, c-format
 msgid "Damage dealt as: %s"
-msgstr ""
+msgstr "가해진 피해: %s"
 
 #: ../../../src/MenuPowers.cpp:1299
 #, c-format
 msgid "Spawn limit: %d"
-msgstr ""
+msgstr "생성 제한: %d"
 
 #: ../../../src/MenuPowers.cpp:1306
 #, c-format
@@ -1578,6 +1581,8 @@ msgid ""
 "Upgrade to: %s (Level %d)\n"
 "Uses 1 Skill Point"
 msgstr ""
+"다음 단계로 업그레이드: %s (레벨 %d)\n"
+"스킬 포인트 1개를 소모함"
 
 #: ../../../src/MenuStash.cpp:182
 msgid "Shared"
@@ -1819,7 +1824,7 @@ msgstr "오른쪽 컨트롤"
 
 #: ../../../src/SDLInputState.cpp:721
 msgid "Return"
-msgstr "돌려주다"
+msgstr "리턴"
 
 #: ../../../src/SDLInputState.cpp:723
 msgid "Right Shift"
@@ -1925,7 +1930,7 @@ msgstr "전리품 풍선 도움말 모드"
 
 #: ../../../src/SDLInputState.cpp:940
 msgid "Action Bar Edit"
-msgstr ""
+msgstr "행동 표시줄 편집"
 
 #: ../../../src/SDLInputState.cpp:941
 msgid "Menu: Next Page"
@@ -1941,11 +1946,11 @@ msgstr "메뉴: 활성화"
 
 #: ../../../src/SDLInputState.cpp:944
 msgid "Pause Game"
-msgstr ""
+msgstr "게임을 일시정지"
 
 #: ../../../src/SDLInputState.cpp:945
 msgid "Cycle Menus"
-msgstr ""
+msgstr "순환 차림표들"
 
 #: ../../../src/SDLInputState.cpp:946
 msgid "Aim Up"
@@ -1969,15 +1974,15 @@ msgstr "개발자 메뉴"
 
 #: ../../../src/SDLInputState.cpp:951
 msgid "Developer Command 1"
-msgstr ""
+msgstr "개발자 명령 1"
 
 #: ../../../src/SDLInputState.cpp:952
 msgid "Developer Command 2"
-msgstr ""
+msgstr "개발자 명령 2"
 
 #: ../../../src/SDLInputState.cpp:953
 msgid "Developer Command 3"
-msgstr ""
+msgstr "개발자 명령 3"
 
 #: ../../../src/SDLInputState.cpp:954
 msgid "Ctrl"
@@ -2259,7 +2264,7 @@ msgstr "적중당 훔칠 마력의 확률입니다."
 
 #: ../../../src/Stats.cpp:165
 msgid "Resist Damage-Over-Time"
-msgstr ""
+msgstr "지속 피해 저항"
 
 #: ../../../src/Stats.cpp:166
 msgid "Percentage chance that damage-over-time effects will be negated."
@@ -2267,7 +2272,7 @@ msgstr "시간 경과에 따른 피해가 사라질 확률입니다."
 
 #: ../../../src/Stats.cpp:172
 msgid "Resist Slow"
-msgstr ""
+msgstr "둔화 저항"
 
 #: ../../../src/Stats.cpp:173
 msgid "Percentage chance that slow effects will be negated."
@@ -2275,7 +2280,7 @@ msgstr "속도 저하가 사라질 확률입니다."
 
 #: ../../../src/Stats.cpp:179
 msgid "Resist Stun"
-msgstr ""
+msgstr "기절 저항"
 
 #: ../../../src/Stats.cpp:180
 msgid "Percentage chance that stun effects will be negated."
@@ -2283,7 +2288,7 @@ msgstr "기절이 사라질 확률입니다."
 
 #: ../../../src/Stats.cpp:186
 msgid "Resist Knockback"
-msgstr ""
+msgstr "뒤로 밀어내기 저항"
 
 #: ../../../src/Stats.cpp:187
 msgid "Percentage chance that knockback effects will be negated."
@@ -2291,7 +2296,7 @@ msgstr "뒤로밀어내기 효과가 무효화될 확률입니다."
 
 #: ../../../src/Stats.cpp:193
 msgid "Resist Stat Debuffs"
-msgstr ""
+msgstr "능력치 약화 저항"
 
 #: ../../../src/Stats.cpp:194
 msgid "Percentage chance that stat debuff effects will be negated."
@@ -2299,7 +2304,7 @@ msgstr "상태 디버프 효과가 사라질 확률입니다."
 
 #: ../../../src/Stats.cpp:200
 msgid "Resist Damage Reflection"
-msgstr ""
+msgstr "피해 반사 저항"
 
 #: ../../../src/Stats.cpp:201
 msgid "Percentage chance that damage reflection will be negated."
@@ -2307,7 +2312,7 @@ msgstr "피해량 반사가 사라질 확률입니다."
 
 #: ../../../src/Stats.cpp:207
 msgid "Resist HP Steal"
-msgstr ""
+msgstr "체력 흡수 저항"
 
 #: ../../../src/Stats.cpp:208
 msgid "Percentage chance that HP steal will be negated."
@@ -2315,7 +2320,7 @@ msgstr "체력 훔치기가 무효화될 확률입니다."
 
 #: ../../../src/Stats.cpp:214
 msgid "Resist MP Steal"
-msgstr ""
+msgstr "마력 흡수 저항"
 
 #: ../../../src/Stats.cpp:215
 msgid "Percentage chance that MP steal will be negated."
@@ -2345,4 +2350,4 @@ msgstr "또는 더오래됨"
 
 #: ../../../src/WidgetLog.cpp:108
 msgid "ERROR: Text output too large"
-msgstr ""
+msgstr "오류: 텍스트 출력이 너무 큼"

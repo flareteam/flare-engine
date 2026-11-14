@@ -28,6 +28,7 @@ text=Bonbadil
 text=Chris Oelmueller
 text=David Bariod
 text=David Bell
+text=Daniel Nylander
 text=Daniel Santos
 text=Gallaecio
 text=Joseph Bleu

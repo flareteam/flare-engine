@@ -336,7 +336,7 @@ msgstr "Tehtäväesine"
 #: ../../../src/ItemManager.cpp:1398
 #, c-format
 msgid "Prevents use of slot: %s"
-msgstr "Estää käyttää paikaa: %s"
+msgstr "Estää käyttämästä paikaa: %s"
 
 #: ../../../src/ItemManager.cpp:1406
 #, c-format
@@ -391,7 +391,7 @@ msgstr "Setti:"
 
 #: ../../../src/ItemManager.cpp:1584 ../../../src/MenuPowers.cpp:1376
 msgid "Tap icon again for more options"
-msgstr "Napauta ikonia uudelleen lisävalintoja varten"
+msgstr "Napauta kuvaketta uudelleen lisävalintoja varten"
 
 #: ../../../src/ItemManager.cpp:1616
 #, c-format
@@ -406,7 +406,7 @@ msgstr "Käytä painamalla [%s]"
 #: ../../../src/ItemManager.cpp:1623 ../../../src/MenuPowers.cpp:1410
 #, c-format
 msgid "Press [%s] for more options"
-msgstr "Paina [%s] lisävalintoja varten"
+msgstr "Katso lisävalintoja painamalla [%s]"
 
 #: ../../../src/ItemStorage.cpp:483
 msgid "Sort by: Type"
@@ -721,8 +721,7 @@ msgstr ""
 msgid ""
 "When enabled, eligible loot will be picked up automatically when nearby."
 msgstr ""
-"Käyttöönotettuna kelvollinen saalis poimitaan automaattisesti lähellä "
-"ollessa."
+"Käyttöönotettuna kelvollinen saalis poimitaan läheltä automaattisesti."
 
 #: ../../../src/MenuConfig.cpp:388
 msgid "Enabled"
@@ -821,7 +820,7 @@ msgstr "Kehysraja"
 
 #: ../../../src/MenuConfig.cpp:474
 msgid "Threaded Image Loading"
-msgstr ""
+msgstr "Säikeistetty kuvien lataaminen"
 
 #: ../../../src/MenuConfig.cpp:475
 msgid "Show player behind walls"
@@ -978,15 +977,16 @@ msgid ""
 "Use multiple CPU threads when loading some images. Try disabling this option"
 " if you experience instability during loading."
 msgstr ""
+"Käytä useita CPU-säikeitä tiettyjen kuvien lataamisessa. Kokeile poistaa "
+"tämä asetus käytöstä, jos lataamisen aikana ilmenee epävakautta."
 
 #: ../../../src/MenuConfig.cpp:640
 msgid ""
 "Lowers the opacity of wall tiles that are covering the player. Disabling "
 "this option may improve performace in some circumstances."
 msgstr ""
-"Alentaa läpinäkyvyyttä seinätiileillä, jotka peittävät pelaajan. Tämän "
-"valinnan poistaminen käytöstä voi parantaa suorituskykyä joissakin "
-"tapauksissa."
+"Alentaa pelaajaa peittävien seinätiilien läpinäkyvyyttä. Tämän valinnan "
+"poistaminen käytöstä voi parantaa suorituskykyä joissakin tapauksissa."
 
 #: ../../../src/MenuConfig.cpp:641
 msgid ""
@@ -1024,8 +1024,7 @@ msgstr ""
 msgid ""
 "This allows the game to be controlled entirely with the keyboard (or "
 "joystick)."
-msgstr ""
-"Tämä sallii pelin ohjaamisen kokonaan näppäimistöllä (tai peliohjaimella)."
+msgstr "Tällä peliä ohjataan kokonaan näppäimistöllä (tai peliohjaimella)."
 
 #: ../../../src/MenuConfig.cpp:646
 msgid ""
@@ -1197,7 +1196,7 @@ msgstr "laittaa HUD-elementit päälle/pois"
 
 #: ../../../src/MenuDevConsole.cpp:480
 msgid "turns on/off the developer hud"
-msgstr "laittaa kehittäjän HUD:in päälle/pois"
+msgstr "laittaa kehittäjän HUD:n päälle/pois"
 
 #: ../../../src/MenuDevConsole.cpp:481
 msgid ""
@@ -1210,8 +1209,8 @@ msgstr ""
 #: ../../../src/MenuDevConsole.cpp:482
 msgid "Prints out all the map filenames located in the \"maps/\" directory."
 msgstr ""
-"Tulostaa kaikki karttatiedostojen nimet, jotka sijaitsevat \"maps/\" "
-"hakemistossa."
+"Tulostaa kaikki karttatiedostojen nimet, jotka sijaitsevat hakemistossa "
+"\"maps/\"."
 
 #: ../../../src/MenuDevConsole.cpp:483
 msgid ""
@@ -1289,7 +1288,7 @@ msgstr ""
 
 #: ../../../src/MenuDevConsole.cpp:667
 msgid "Current shortcuts:"
-msgstr "Nykyiset näppäinoikotiet:"
+msgstr "Nykyiset pikanäppäimet:"
 
 #: ../../../src/MenuDevConsole.cpp:676
 #, c-format
@@ -1298,13 +1297,15 @@ msgstr "Kirjoita komento, jonka haluat tallentaa paikkaan %d."
 
 #: ../../../src/MenuDevConsole.cpp:680
 msgid "ERROR: Not a valid shortcut slot."
-msgstr ""
+msgstr "VIRHE: Kelvoton pikanäppäinpaikka."
 
 #: ../../../src/MenuDevConsole.cpp:686
 msgid ""
 "Procedural chunk maps are only available for generated maps. This map is "
 "either not a procedural map, or the chunk data is corrupt."
 msgstr ""
+"Proseduraaliset lohkokartat ovat käytettävissä vain generoiduissa kartoissa."
+" Tämä kartta ei joko ole generoitu tai lohkotiedot ovat vioittuneet."
 
 #: ../../../src/MenuDevConsole.cpp:703
 #, c-format
@@ -1413,7 +1414,7 @@ msgstr "Tavaraluettelo on täynnä."
 #: ../../../src/MenuInventory.cpp:1074
 #, c-format
 msgid "Not enough %s."
-msgstr "Ei tarpeeksi %s."
+msgstr "%s ei riitä."
 
 #: ../../../src/MenuInventory.cpp:1094 ../../../src/MenuInventory.cpp:1101
 msgid "This item can not be sold."
@@ -1879,7 +1880,7 @@ msgstr ""
 
 #: ../../../src/SDLInputState.cpp:725
 msgid "Space"
-msgstr "Väli"
+msgstr "Välilyönti"
 
 #: ../../../src/SDLInputState.cpp:737
 #, c-format
@@ -2017,15 +2018,15 @@ msgstr "Kehittäjävalikko"
 
 #: ../../../src/SDLInputState.cpp:951
 msgid "Developer Command 1"
-msgstr ""
+msgstr "Kehittäjän komento 1"
 
 #: ../../../src/SDLInputState.cpp:952
 msgid "Developer Command 2"
-msgstr ""
+msgstr "Kehittäjän komento 2"
 
 #: ../../../src/SDLInputState.cpp:953
 msgid "Developer Command 3"
-msgstr ""
+msgstr "Kehittäjän komento 3"
 
 #: ../../../src/SDLInputState.cpp:954
 msgid "Ctrl"
