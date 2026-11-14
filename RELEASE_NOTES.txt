@@ -83,6 +83,7 @@ Engine fixes:
 * Powers
 	- Fixed repeater powers not respecting the 'starting_pos' property.
 	- Fixed the player being able to use movement powers when their movement was locked by NPC dialog.
+	- Support negative values for HP/MP/resource over-time effects.
 
 * UI
 	- Fixed bug where player could change equipment mid-attack. Trying to switch equipment while attacking now simply resets the player to the 'stance' state.

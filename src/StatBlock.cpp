@@ -1236,54 +1236,70 @@ void StatBlock::logic() {
 	}
 
 	// apply healing over time
-	if (effects.hpot > 0) {
+	if (effects.hpot != 0) {
 		float hpot = effects.hpot;
 		hpot = eset->combat.resourceRound(hpot);
-		comb->addString(msg->getv("+%s HP", Utils::floatToString(hpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
+		if (hpot < 0)
+			comb->addString(msg->getv("%s HP", Utils::floatToString(hpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_TAKEDMG);
+		else
+			comb->addString(msg->getv("+%s HP", Utils::floatToString(hpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
 		hp += hpot;
-		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
+		hp = std::max(0.0f, std::min(hp, get(Stats::HP_MAX)));
 	}
-	if (effects.hpot_percent > 0) {
+	if (effects.hpot_percent != 0) {
 		float hpot = (get(Stats::HP_MAX) * effects.hpot_percent) / 100;
 		hpot = eset->combat.resourceRound(hpot);
-		comb->addString(msg->getv("+%s HP", Utils::floatToString(hpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
+		if (hpot < 0)
+			comb->addString(msg->getv("%s HP", Utils::floatToString(hpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_TAKEDMG);
+		else
+			comb->addString(msg->getv("+%s HP", Utils::floatToString(hpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
 		hp += hpot;
-		if (hp > get(Stats::HP_MAX)) hp = get(Stats::HP_MAX);
+		hp = std::max(0.0f, std::min(hp, get(Stats::HP_MAX)));
 	}
-	if (effects.mpot > 0) {
+	if (effects.mpot != 0) {
 		float mpot = effects.mpot;
 		mpot = eset->combat.resourceRound(mpot);
-		comb->addString(msg->getv("+%s MP", Utils::floatToString(mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
+		if (mpot < 0)
+			comb->addString(msg->getv("%s MP", Utils::floatToString(mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_TAKEDMG);
+		else
+			comb->addString(msg->getv("+%s MP", Utils::floatToString(mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
 		mp += mpot;
-		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
+		mp = std::max(0.0f, std::min(mp, get(Stats::MP_MAX)));
 	}
-	if (effects.mpot_percent > 0) {
+	if (effects.mpot_percent != 0) {
 		float mpot = (get(Stats::MP_MAX) * effects.mpot_percent) / 100;
 		mpot = eset->combat.resourceRound(mpot);
-		comb->addString(msg->getv("+%s MP", Utils::floatToString(mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
+		if (mpot < 0)
+			comb->addString(msg->getv("%s MP", Utils::floatToString(mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_TAKEDMG);
+		else
+			comb->addString(msg->getv("+%s MP", Utils::floatToString(mpot, eset->number_format.combat_text).c_str()), pos, CombatText::MSG_BUFF);
 		mp += mpot;
-		if (mp > get(Stats::MP_MAX)) mp = get(Stats::MP_MAX);
+		mp = std::max(0.0f, std::min(mp, get(Stats::MP_MAX)));
 	}
 	for (size_t i = 0; i < resource_stats.size(); ++i) {
-		if (effects.resource_ot[i] > 0) {
+		if (effects.resource_ot[i] != 0) {
 			float resource_max = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
 			float resource_ot = effects.resource_ot[i];
 			resource_ot = eset->combat.resourceRound(resource_ot);
-			comb->addString("+" + Utils::floatToString(resource_ot, eset->number_format.combat_text) + " " + eset->resource_stats.list[i].text_combat_heal, pos, CombatText::MSG_BUFF);
+			if (resource_ot < 0)
+				comb->addString(Utils::floatToString(resource_ot, eset->number_format.combat_text) + " " + eset->resource_stats.list[i].text_combat_heal, pos, CombatText::MSG_TAKEDMG);
+			else
+				comb->addString("+" + Utils::floatToString(resource_ot, eset->number_format.combat_text) + " " + eset->resource_stats.list[i].text_combat_heal, pos, CombatText::MSG_BUFF);
 			resource_stats[i] += resource_ot;
 
-			if (resource_stats[i] > resource_max)
-				resource_stats[i] = resource_max;
+			resource_stats[i] = std::max(0.0f, std::min(resource_stats[i], resource_max));
 		}
-		if (effects.resource_ot_percent[i] > 0) {
+		if (effects.resource_ot_percent[i] != 0) {
 			float resource_max = getResourceStat(i, EngineSettings::ResourceStats::STAT_BASE);
 			float resource_ot = (resource_max * effects.resource_ot_percent[i]) / 100;
 			resource_ot = eset->combat.resourceRound(resource_ot);
-			comb->addString("+" + Utils::floatToString(resource_ot, eset->number_format.combat_text) + " " + eset->resource_stats.list[i].text_combat_heal, pos, CombatText::MSG_BUFF);
+			if (resource_ot < 0)
+				comb->addString(Utils::floatToString(resource_ot, eset->number_format.combat_text) + " " + eset->resource_stats.list[i].text_combat_heal, pos, CombatText::MSG_TAKEDMG);
+			else
+				comb->addString("+" + Utils::floatToString(resource_ot, eset->number_format.combat_text) + " " + eset->resource_stats.list[i].text_combat_heal, pos, CombatText::MSG_BUFF);
 			resource_stats[i] += resource_ot;
 
-			if (resource_stats[i] > resource_max)
-				resource_stats[i] = resource_max;
+			resource_stats[i] = std::max(0.0f, std::min(resource_stats[i], resource_max));
 		}
 	}
 
