@@ -2235,6 +2235,10 @@ void ItemManager::loadExtendedItems(const std::string& filename) {
 }
 
 void ItemManager::getExtendedStacks(ItemID item_id, unsigned quantity, std::vector<ItemStack>& stacks) {
+	if (item_id >= items.size() || items[item_id] == NULL) {
+		return;
+	}
+
 	ItemStack stack;
 
 	if (items[item_id]->randomizer_def) {
